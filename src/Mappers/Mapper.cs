@@ -11,5 +11,8 @@ public class Mapper : Profile
         CreateMap<User, UserReadDto>();
         CreateMap<UserCreateDto, User>();
 
+        CreateMap<ToDo, ToDoReadDto>();
+        CreateMap<ToDoCreteDto, ToDo>();
+
     }
 }

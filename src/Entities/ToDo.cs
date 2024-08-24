@@ -8,7 +8,7 @@ public class ToDo
     [Required]
     public string Title { get; set; }
     [Required]
-    public string Name { get; set; }
+    public string Description  { get; set; }
     [Required]
     public string Status { get; set; }
     [Required]

@@ -1,5 +1,6 @@
 using Todo_backend.src.Entities;
 using Microsoft.EntityFrameworkCore;
+using Todo_backend.src.Enums;
 namespace Todo_backend.src.Databases;
 public class DatabaseContext : DbContext // DbContext is built in class to give me access to database (gateway to database)
 {
@@ -10,6 +11,7 @@ public class DatabaseContext : DbContext // DbContext is built in class to give 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasPostgresEnum<Status>(); // add the type Status
     }
 }
 

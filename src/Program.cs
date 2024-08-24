@@ -9,12 +9,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
+using Todo_backend.src.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 var _config = builder.Configuration;
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(@$"Host={_config["Db:Host"]};Username={_config["Db:Username"]};Database={_config["Db:Database"]};Password={_config["Db:Password"]};Port={_config["Db:Port"]}");
+dataSourceBuilder.MapEnum<Status>();
 
 var dataSource = dataSourceBuilder.Build();
 builder.Services.AddDbContext<DatabaseContext>((options) =>

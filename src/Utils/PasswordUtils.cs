@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 
-namespace Todo_backend.src.Utils
+namespace Harkh_backend.src.Utils
 {
     public class PasswordUtils
     {

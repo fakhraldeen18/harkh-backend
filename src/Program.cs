@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using Todo_backend.src.Databases;
-using Todo_backend.src.Abstractions;
-using Todo_backend.src.Repositories;
-using Todo_backend.src.Services;
+using Harkh_backend.src.Databases;
+using Harkh_backend.src.Abstractions;
+using Harkh_backend.src.Repositories;
+using Harkh_backend.src.Services;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
-using Todo_backend.src.Enums;
+using Harkh_backend.src.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 var _config = builder.Configuration;
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(@$"Host={_config["Db:Host"]};Username={_config["Db:Username"]};Database={_config["Db:Database"]};Password={_config["Db:Password"]};Port={_config["Db:Port"]}");
 dataSourceBuilder.MapEnum<Status>();
+dataSourceBuilder.MapEnum<Role>();
+dataSourceBuilder.MapEnum<Priority>();
 
 var dataSource = dataSourceBuilder.Build();
 builder.Services.AddDbContext<DatabaseContext>((options) =>
@@ -84,8 +86,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllers();
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
-builder.Services.AddScoped<IToDoRepository, ToDoRepository>();
-builder.Services.AddScoped<IToDoService, ToDoService>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();

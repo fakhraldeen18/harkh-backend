@@ -1,9 +1,9 @@
-using Todo_backend.src.Abstractions;
-using Todo_backend.src.Databases;
-using Todo_backend.src.Entities;
+using Harkh_backend.src.Abstractions;
+using Harkh_backend.src.Databases;
+using Harkh_backend.src.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Todo_backend.src.Repositories;
+namespace Harkh_backend.src.Repositories;
 
 public class UserRepository : IUserRepository
 {

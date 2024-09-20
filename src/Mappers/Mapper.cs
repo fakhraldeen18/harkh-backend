@@ -1,8 +1,8 @@
-using Todo_backend.src.DTOs;
-using Todo_backend.src.Entities;
+using Harkh_backend.src.DTOs;
+using Harkh_backend.src.Entities;
 using AutoMapper;
 
-namespace Todo_backend.src.Mappers;
+namespace Harkh_backend.src.Mappers;
 
 public class Mapper : Profile
 {
@@ -11,8 +11,8 @@ public class Mapper : Profile
         CreateMap<User, UserReadDto>();
         CreateMap<UserCreateDto, User>();
 
-        CreateMap<ToDo, ToDoReadDto>();
-        CreateMap<ToDoCreteDto, ToDo>();
+        CreateMap<Entities.Task, TaskReadDto>();
+        CreateMap<TaskCreteDto, Entities.Task>();
 
     }
 }

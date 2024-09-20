@@ -1,7 +1,6 @@
-using Todo_backend.src.DTOs;
-using Todo_backend.src.Entities;
+using Harkh_backend.src.DTOs;
 
-namespace Todo_backend.src.Abstractions;
+namespace Harkh_backend.src.Abstractions;
 
 public interface IUserService
 {
@@ -13,5 +12,6 @@ public interface IUserService
     public UserReadDto? SignUp(UserCreateDto user);
     public bool DeleteOne(Guid id);
     public UserReadDto? UpdateOne(Guid id, UserUpdateDto updatedUser);
+    public UserReadDto? UpdateRole(Guid id, UserUpdateRoleDto updatedUser);
 
 }

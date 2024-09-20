@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using Todo_backend.src.Enums;
+using Harkh_backend.src.Enums;
 
-namespace Todo_backend.src.DTOs;
+namespace Harkh_backend.src.DTOs;
 
-public class ToDoReadDto
+public class TaskReadDto
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
@@ -14,11 +14,15 @@ public class ToDoReadDto
     [Required]
     public string Status { get; set; }
     [Required]
+    public string Priority { get; set; }
+    [Required]
     public DateTime CreatedAt { get; set; }
     [Required]
-    public DateTime EndDate { get; set; }
+    public DateTime DueDate { get; set; }
+    [Required]
+    public DateTime UpdateAt { get; set; }
 }
-public class ToDoCreteDto
+public class TaskCreteDto
 {
     public Guid UserId { get; set; }
     [Required]
@@ -29,11 +33,13 @@ public class ToDoCreteDto
     [Required]
     public Status Status { get; set; }
     [Required]
-    public DateTime CreatedAt { get; set; }
+    public Priority Priority { get; set; }
     [Required]
-    public DateTime EndDate { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    [Required]
+    public DateTime UpdateAt { get; set; }
 }
-public class ToDoUpdateDto
+public class TaskUpdateDto
 {
     [Required]
     public string Title { get; set; }
@@ -42,12 +48,19 @@ public class ToDoUpdateDto
     [Required]
     public Status Status { get; set; }
     [Required]
-    public DateTime CreatedAt { get; set; }
+    public Priority Priority { get; set; }
     [Required]
-    public DateTime EndDate { get; set; }
+    public DateTime DueDate { get; set; }
+    [Required]
+    public DateTime UpdateAt { get; set; } = DateTime.Now;
 }
-public class ToDoUpdateStatusDto
+public class TaskUpdateStatusDto
 {
     [Required]
     public Status Status { get; set; }
 }
+// public class TaskUpdatePriorityDto
+// {
+//     [Required]
+//     public Priority Priority { get; set; }
+// }

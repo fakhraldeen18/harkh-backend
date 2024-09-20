@@ -1,14 +1,14 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Todo_backend.src.Abstractions;
-using Todo_backend.src.DTOs;
-using Todo_backend.src.Entities;
-using Todo_backend.src.Utils;
+using Harkh_backend.src.Abstractions;
+using Harkh_backend.src.DTOs;
+using Harkh_backend.src.Entities;
+using Harkh_backend.src.Utils;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Todo_backend.src.Services;
+namespace Harkh_backend.src.Services;
 
 public class UserService : IUserService
 {
@@ -93,6 +93,15 @@ public class UserService : IUserService
         user.Name = updatedUser.Name;
         user.Email = updatedUser.Email;
         user.Phone = updatedUser.Phone;
+        user.UpdatedAt = updatedUser.UpdatedAt;
+        _userRepository.UpdateOne(user);
+        return _mapper.Map<UserReadDto>(user);
+    }
+    public UserReadDto? UpdateRole(Guid id, UserUpdateRoleDto updatedUser)
+    {
+        User? user = _userRepository.FindOne(id);
+        if (user == null) return null;
+        user.Role = updatedUser.Role;
         _userRepository.UpdateOne(user);
         return _mapper.Map<UserReadDto>(user);
     }

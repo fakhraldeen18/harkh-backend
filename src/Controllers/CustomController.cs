@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Todo_backend.src.Controllers;
+namespace Harkh_backend.src.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]

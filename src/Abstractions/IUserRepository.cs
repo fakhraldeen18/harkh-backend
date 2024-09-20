@@ -1,6 +1,6 @@
-using Todo_backend.src.Entities;
+using Harkh_backend.src.Entities;
 
-namespace Todo_backend.src.Abstractions;
+namespace Harkh_backend.src.Abstractions;
 
 public interface IUserRepository
 {

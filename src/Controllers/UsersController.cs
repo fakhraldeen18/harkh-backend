@@ -1,9 +1,9 @@
-using Todo_backend.src.Abstractions;
-using Todo_backend.src.DTOs;
+using Harkh_backend.src.Abstractions;
+using Harkh_backend.src.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Todo_backend.src.Controllers;
+namespace Harkh_backend.src.Controllers;
 public class UsersController : CustomController
 {
     private readonly IUserService _userService;
@@ -60,6 +60,16 @@ public class UsersController : CustomController
         UserReadDto? findUser = _userService.FindOne(Id);
         if (findUser == null) return NotFound();
         UserReadDto? UpdatedUser = _userService.UpdateOne(Id, UpdateUser);
+        return Accepted(UpdatedUser);
+    }
+    [HttpPatch("UpdateRole/{Id}")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<UserReadDto> UpdateRole(Guid Id, [FromBody] UserUpdateRoleDto UpdateUser)
+    {
+        UserReadDto? findUser = _userService.FindOne(Id);
+        if (findUser == null) return NotFound();
+        UserReadDto? UpdatedUser = _userService.UpdateRole(Id, UpdateUser);
         return Accepted(UpdatedUser);
     }
 

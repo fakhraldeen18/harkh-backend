@@ -14,6 +14,7 @@ public class DatabaseContext : DbContext // DbContext is built in class to give 
         modelBuilder.HasPostgresEnum<Status>(); // add the type Status
         modelBuilder.HasPostgresEnum<Priority>(); // add the type Priority
         modelBuilder.HasPostgresEnum<Role>(); // add the type Role
+        modelBuilder.HasPostgresEnum<ProjectStatus>(); // add the type Project status
     }
 }
 

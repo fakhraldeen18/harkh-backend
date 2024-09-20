@@ -21,6 +21,7 @@ public class User
     public string Phone { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-
-    public List<Task> Tasks { get; set; } // Navigation order
+    // Navigation properties
+    public List<Task> Tasks { get; set; }
+    public Project Project { get; set; }
 }

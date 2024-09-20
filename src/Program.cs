@@ -19,6 +19,7 @@ var dataSourceBuilder = new NpgsqlDataSourceBuilder(@$"Host={_config["Db:Host"]}
 dataSourceBuilder.MapEnum<Status>();
 dataSourceBuilder.MapEnum<Role>();
 dataSourceBuilder.MapEnum<Priority>();
+dataSourceBuilder.MapEnum<ProjectStatus>();
 
 var dataSource = dataSourceBuilder.Build();
 builder.Services.AddDbContext<DatabaseContext>((options) =>

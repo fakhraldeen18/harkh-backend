@@ -6,6 +6,7 @@ public class DatabaseContext : DbContext // DbContext is built in class to give 
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Entities.Task> Tasks { get; set; }
+    public DbSet<Project> Projects { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
@@ -17,10 +18,3 @@ public class DatabaseContext : DbContext // DbContext is built in class to give 
         modelBuilder.HasPostgresEnum<ProjectStatus>(); // add the type Project status
     }
 }
-
-
-
-
-
-
-

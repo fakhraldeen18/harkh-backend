@@ -26,7 +26,7 @@ public class ProjectsController : CustomController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<ProjectReadDto> CreateOne([FromBody] ProjectCreatDto newProject)
+    public ActionResult<ProjectReadDto> CreateOne([FromBody] ProjectCreateDto newProject)
     {
         if (newProject == null) return BadRequest();
         ProjectReadDto? caretProject = _projectService.CreateOne(newProject);

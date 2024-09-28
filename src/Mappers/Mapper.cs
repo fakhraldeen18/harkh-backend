@@ -15,6 +15,9 @@ public class Mapper : Profile
         CreateMap<TaskCreteDto, Entities.Task>();
 
         CreateMap<Project, ProjectReadDto>();
-        CreateMap<ProjectCreatDto, Project>();
+        CreateMap<ProjectCreateDto, Project>();
+
+        CreateMap<Team, TeamReadDto>();
+        CreateMap<TeamCreateDto, Team>();
     }
 }

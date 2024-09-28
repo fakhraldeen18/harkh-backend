@@ -16,7 +16,7 @@ public class ProjectService : IProjectService
         _mapper = mapper;
     }
 
-    public ProjectReadDto? CreateOne(ProjectCreatDto newProject)
+    public ProjectReadDto? CreateOne(ProjectCreateDto newProject)
     {
         Project? project = _mapper.Map<Project>(newProject);
         if (project == null) return null;

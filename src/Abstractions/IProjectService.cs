@@ -8,7 +8,7 @@ public interface IProjectService
 
     public IEnumerable<ProjectReadDto> FindAll();
     public ProjectReadDto? FindOne(Guid id);
-    public ProjectReadDto? CreateOne(ProjectCreatDto newProject);
+    public ProjectReadDto? CreateOne(ProjectCreateDto newProject);
     public bool DeleteOne(Guid id);
     public ProjectReadDto? UpdateOne(Guid id, ProjectUpdateDto updatedProject);
     public ProjectReadDto? UpdateStatus(Guid id, ProjectUpdateStatusDto updatedProject);

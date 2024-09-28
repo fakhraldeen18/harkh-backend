@@ -26,7 +26,7 @@ public class TaskReadDto
 public class TaskCreteDto
 {
     public Guid UserId { get; set; }
-    public Guid MilestoneId { get; set; }
+    public Guid? MilestoneId { get; set; }
     [Required]
     public string Title { get; set; }
     [Required]

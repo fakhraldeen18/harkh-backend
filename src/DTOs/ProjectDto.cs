@@ -15,7 +15,7 @@ public class ProjectReadDto
     public DateTime UpdateAt { get; set; }
 
 }
-public class ProjectCreatDto
+public class ProjectCreateDto
 {
     public Guid UserId { get; set; }
     public string Name { get; set; }

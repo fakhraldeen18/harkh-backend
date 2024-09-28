@@ -8,4 +8,6 @@ public class Milestone
     public DateTime CreateAt { get; set; }
     public DateTime UpdateAt { get; set; }
 
+    // Navigation properties
+    public List<Task> Tasks { get; set; }
 }

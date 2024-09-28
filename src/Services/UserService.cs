@@ -90,6 +90,7 @@ public class UserService : IUserService
     {
         User? user = _userRepository.FindOne(id);
         if (user == null) return null;
+        user.TeamId = updatedUser.TeamId;
         user.Name = updatedUser.Name;
         user.Email = updatedUser.Email;
         user.Phone = updatedUser.Phone;

@@ -16,7 +16,6 @@ public class Project
 
     // Navigation properties
     public User User { get; set; }
-    public List<Task> Tasks { get; set; }
     public List<Team> Teams { get; set; }
     public List<Milestone> Milestones { get; set; }
 }

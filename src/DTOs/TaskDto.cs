@@ -7,7 +7,7 @@ public class TaskReadDto
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
-    public Guid ProjectId { get; set; }
+    public Guid MilestoneId { get; set; }
     [Required]
     public string Title { get; set; }
     [Required]
@@ -26,7 +26,7 @@ public class TaskReadDto
 public class TaskCreteDto
 {
     public Guid UserId { get; set; }
-    public Guid ProjectId { get; set; }
+    public Guid MilestoneId { get; set; }
     [Required]
     public string Title { get; set; }
     [Required]

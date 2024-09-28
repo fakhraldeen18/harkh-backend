@@ -9,6 +9,7 @@ namespace Harkh_backend.src.Entities;
 public class User
 {
     public Guid Id { get; set; }
+    public Guid TeamId { get; set; } // foreign key
     [Required]
     public string Name { get; set; }
     [Required]

@@ -6,6 +6,7 @@ namespace Harkh_backend.src.DTOs;
 public class UserReadDto
 {
     public Guid Id { get; set; }
+    public Guid TeamId { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
@@ -16,6 +17,7 @@ public class UserReadDto
 
 public class UserCreateDto
 {
+    public Guid TeamId { get; set; }
     [Required]
     public string Name { get; set; }
     [Required]
@@ -39,6 +41,7 @@ public class UserLogInDto
 
 public class UserUpdateDto
 {
+    public Guid TeamId { get; set; }
     [Required]
     public string Name { get; set; }
     [Required]

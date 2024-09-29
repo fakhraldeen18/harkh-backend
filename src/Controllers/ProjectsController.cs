@@ -1,4 +1,3 @@
-using AutoMapper;
 using Harkh_backend.src.Abstractions;
 using Harkh_backend.src.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -76,6 +75,16 @@ public class ProjectsController : CustomController
         var findProject = _projectService.FindOne(id);
         if (findProject == null) return NotFound();
         ProjectReadDto? updatedProject = _projectService.UpdateStatus(id, updateProjectStatus);
+        return Accepted(updatedProject);
+    }
+    [HttpPatch("UpdateProgress/{id}")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<ProjectReadDto> UpdateProgress(Guid id, [FromBody] ProjectUpdateProgressDto updateProjectProgress)
+    {
+        var findProject = _projectService.FindOne(id);
+        if (findProject == null) return NotFound();
+        ProjectReadDto? updatedProject = _projectService.UpdateProgress(id, updateProjectProgress);
         return Accepted(updatedProject);
     }
 }

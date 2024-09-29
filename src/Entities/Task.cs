@@ -12,6 +12,8 @@ public class Task
     [Required]
     public string Description { get; set; }
     [Required]
+    public float Progress { get; set; }
+    [Required]
     public Status Status { get; set; }
     [Required]
     public Priority Priority { get; set; }

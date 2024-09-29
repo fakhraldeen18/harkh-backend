@@ -52,6 +52,7 @@ public class ProjectService : IProjectService
         if (project == null) return null;
         project.UserId = updatedProject.UserId;
         project.Name = updatedProject.Name;
+        project.Progress = updatedProject.Progress;
         project.Description = updatedProject.Description;
         project.StartDate = updatedProject.StartDate;
         project.EndDate = updatedProject.EndDate;
@@ -67,6 +68,14 @@ public class ProjectService : IProjectService
         if (project == null) return null;
         project.Status = updatedProject.Status;
         project.UpdateAt = updatedProject.UpdateAt;
+        _projectRepository.UpdateOne(project);
+        return _mapper.Map<ProjectReadDto>(project);
+    }
+    public ProjectReadDto? UpdateProgress(Guid id, ProjectUpdateProgressDto updatedProject)
+    {
+        Project? project = _projectRepository.FindOne(id);
+        if (project == null) return null;
+        project.Progress = updatedProject.Progress;
         _projectRepository.UpdateOne(project);
         return _mapper.Map<ProjectReadDto>(project);
     }

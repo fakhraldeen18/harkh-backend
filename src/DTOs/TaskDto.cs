@@ -13,6 +13,8 @@ public class TaskReadDto
     [Required]
     public string Description { get; set; }
     [Required]
+    public float Progress { get; set; }
+    [Required]
     public string Status { get; set; }
     [Required]
     public string Priority { get; set; }
@@ -31,15 +33,13 @@ public class TaskCreteDto
     public string Title { get; set; }
     [Required]
     public string Description { get; set; }
-
     [Required]
+    public float Progress { get; set; } = 0;
     public Status Status { get; set; }
     [Required]
     public Priority Priority { get; set; }
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
-    [Required]
-    public DateTime UpdateAt { get; set; }
 }
 public class TaskUpdateDto
 {
@@ -48,6 +48,7 @@ public class TaskUpdateDto
     [Required]
     public string Description { get; set; }
     [Required]
+    public float Progress { get; set; }
     public Status Status { get; set; }
     [Required]
     public Priority Priority { get; set; }
@@ -60,6 +61,15 @@ public class TaskUpdateStatusDto
 {
     [Required]
     public Status Status { get; set; }
+    [Required]
+    public DateTime UpdateAt { get; set; } = DateTime.Now;
+}
+public class TaskUpdateProgressDto
+{
+    [Required]
+    public float Progress { get; set; }
+    [Required]
+    public DateTime UpdateAt { get; set; } = DateTime.Now;
 }
 // public class TaskUpdatePriorityDto
 // {

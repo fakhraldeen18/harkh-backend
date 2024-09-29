@@ -55,4 +55,6 @@ public class UserUpdateRoleDto
 {
     [Required]
     public Role Role { get; set; }
+    [Required]
+    public DateTime UpdateAt { get; set; } = DateTime.Now;
 }

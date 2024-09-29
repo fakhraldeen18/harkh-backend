@@ -52,6 +52,7 @@ public class TaskService : ITaskService
         if (Task == null) return null;
         Task.Title = updatedTask.Title;
         Task.Description = updatedTask.Description;
+        Task.Progress = updatedTask.Progress;
         Task.Status = updatedTask.Status;
         Task.Priority = updatedTask.Priority;
         Task.DueDate = updatedTask.DueDate;
@@ -65,6 +66,14 @@ public class TaskService : ITaskService
         Entities.Task? Task = _TaskRepository.FindOne(id);
         if (Task == null) return null;
         Task.Status = updatedStatus.Status;
+        _TaskRepository.UpdateOne(Task);
+        return _mapper.Map<TaskReadDto>(Task);
+    }
+    public TaskReadDto? UpdateProgress(Guid id, TaskUpdateProgressDto updatedProgress)
+    {
+        Entities.Task? Task = _TaskRepository.FindOne(id);
+        if (Task == null) return null;
+        Task.Progress = updatedProgress.Progress;
         _TaskRepository.UpdateOne(Task);
         return _mapper.Map<TaskReadDto>(Task);
     }

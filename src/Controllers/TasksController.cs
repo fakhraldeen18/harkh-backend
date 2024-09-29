@@ -71,4 +71,14 @@ public class TasksController : CustomController
         TaskReadDto? updatedTask = _TaskService.UpdateStatus(Id, updateStatus);
         return Accepted(updatedTask);
     }
+    [HttpPatch("UpdateProgress/{Id}")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<TaskReadDto> UpdateProgress(Guid Id, [FromBody] TaskUpdateProgressDto updateProgress)
+    {
+        var findTask = _TaskService.FindOne(Id);
+        if (findTask == null) return NotFound();
+        TaskReadDto? updatedTask = _TaskService.UpdateProgress(Id, updateProgress);
+        return Accepted(updatedTask);
+    }
 }

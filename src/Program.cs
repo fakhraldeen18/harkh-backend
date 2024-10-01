@@ -99,6 +99,9 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 
+builder.Services.AddScoped<IMilestoneRepository, MilestoneRepository>();
+builder.Services.AddScoped<IMilestoneService, MilestoneService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

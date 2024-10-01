@@ -7,12 +7,14 @@ namespace Harkh_backend.src.Services;
 
 public class TaskService : ITaskService
 {
-    private readonly ITaskRepository _TaskRepository;
+    private readonly ITaskRepository _taskRepository;
+    private readonly IMilestoneRepository _milestoneRepository;
     private readonly IMapper _mapper;
 
-    public TaskService(ITaskRepository TaskRepository, IMapper mapper)
+    public TaskService(ITaskRepository taskRepository, IMapper mapper, IMilestoneRepository milestoneRepository)
     {
-        _TaskRepository = TaskRepository;
+        _taskRepository = taskRepository;
+        _milestoneRepository = milestoneRepository;
         _mapper = mapper;
     }
 
@@ -20,35 +22,38 @@ public class TaskService : ITaskService
     {
         Entities.Task ReadTask = _mapper.Map<Entities.Task>(newTask);
         if (ReadTask == null) return null;
-        _TaskRepository.CreateOne(ReadTask);
+        _taskRepository.CreateOne(ReadTask);
+        Milestone? milestone = _milestoneRepository.FindOne(ReadTask.MilestoneId);
+        if (milestone?.Id == null) return _mapper.Map<TaskReadDto>(ReadTask); ;
+        _milestoneRepository.UpdateProgress(milestone.Id);
         return _mapper.Map<TaskReadDto>(ReadTask);
     }
 
     public bool DeleteOne(Guid id)
     {
-        Entities.Task? findTask = _TaskRepository.FindOne(id);
+        Entities.Task? findTask = _taskRepository.FindOne(id);
         if (findTask == null) return false;
-        _TaskRepository.DeleteOne(id);
+        _taskRepository.DeleteOne(id);
         return true;
     }
 
     public IEnumerable<TaskReadDto> FindAll()
     {
-        IEnumerable<Entities.Task> Tasks = _TaskRepository.FindAll();
+        IEnumerable<Entities.Task> Tasks = _taskRepository.FindAll();
         IEnumerable<TaskReadDto> readTasks = _mapper.Map<IEnumerable<TaskReadDto>>(Tasks);
         return readTasks;
     }
 
     public TaskReadDto? FindOne(Guid id)
     {
-        Entities.Task? findTask = _TaskRepository.FindOne(id);
+        Entities.Task? findTask = _taskRepository.FindOne(id);
         if (findTask == null) return null;
         return _mapper.Map<TaskReadDto>(findTask); ;
     }
 
     public TaskReadDto? UpdateOne(Guid id, TaskUpdateDto updatedTask)
     {
-        Entities.Task? Task = _TaskRepository.FindOne(id);
+        Entities.Task? Task = _taskRepository.FindOne(id);
         if (Task == null) return null;
         Task.Title = updatedTask.Title;
         Task.Description = updatedTask.Description;
@@ -57,24 +62,30 @@ public class TaskService : ITaskService
         Task.Priority = updatedTask.Priority;
         Task.DueDate = updatedTask.DueDate;
         Task.UpdateAt = updatedTask.UpdateAt;
-        _TaskRepository.UpdateOne(Task);
+        _taskRepository.UpdateOne(Task);
+        Milestone? milestone = _milestoneRepository.FindOne(Task.MilestoneId);
+        if (milestone?.Id == null) return _mapper.Map<TaskReadDto>(Task);
+        _milestoneRepository.UpdateProgress(milestone.Id);
         return _mapper.Map<TaskReadDto>(Task);
     }
 
     public TaskReadDto? UpdateStatus(Guid id, TaskUpdateStatusDto updatedStatus)
     {
-        Entities.Task? Task = _TaskRepository.FindOne(id);
+        Entities.Task? Task = _taskRepository.FindOne(id);
         if (Task == null) return null;
         Task.Status = updatedStatus.Status;
-        _TaskRepository.UpdateOne(Task);
+        _taskRepository.UpdateOne(Task);
         return _mapper.Map<TaskReadDto>(Task);
     }
     public TaskReadDto? UpdateProgress(Guid id, TaskUpdateProgressDto updatedProgress)
     {
-        Entities.Task? Task = _TaskRepository.FindOne(id);
+        Entities.Task? Task = _taskRepository.FindOne(id);
         if (Task == null) return null;
         Task.Progress = updatedProgress.Progress;
-        _TaskRepository.UpdateOne(Task);
+        _taskRepository.UpdateOne(Task);
+        Milestone? milestone = _milestoneRepository.FindOne(Task.MilestoneId);
+        if (milestone?.Id == null) return _mapper.Map<TaskReadDto>(Task);
+        _milestoneRepository.UpdateProgress(milestone.Id);
         return _mapper.Map<TaskReadDto>(Task);
     }
 }

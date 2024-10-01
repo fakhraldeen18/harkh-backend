@@ -43,7 +43,13 @@ public class TaskRepository : ITaskRepository
         Entities.Task? findOne = Tasks.FirstOrDefault(t => t.Id == id);
         return findOne;
     }
-
+    public Guid? FindMilestoneId(Guid id)
+    {
+        IEnumerable<Entities.Task> Tasks = _Tasks;
+        Entities.Task? findOne = Tasks.FirstOrDefault(t => t.Id == id);
+        if (findOne?.MilestoneId == null) return null;
+        return findOne.MilestoneId;
+    }
     public Entities.Task UpdateOne(Entities.Task updatedTask)
     {
         _Tasks.Update(updatedTask);

@@ -7,4 +7,5 @@ public interface ITaskRepository
     public Entities.Task CreateOne(Entities.Task newTask);
     public Entities.Task? DeleteOne(Guid id);
     public Entities.Task UpdateOne(Entities.Task updatedTask);
+    public Guid? FindMilestoneId(Guid id);
 }

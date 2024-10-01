@@ -19,5 +19,8 @@ public class Mapper : Profile
 
         CreateMap<Team, TeamReadDto>();
         CreateMap<TeamCreateDto, Team>();
+        
+        CreateMap<Milestone, MilestoneReadDto>();
+        CreateMap<MilestoneCreateDto, Milestone>();
     }
 }

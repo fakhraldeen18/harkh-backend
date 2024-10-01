@@ -77,14 +77,4 @@ public class ProjectsController : CustomController
         ProjectReadDto? updatedProject = _projectService.UpdateStatus(id, updateProjectStatus);
         return Accepted(updatedProject);
     }
-    [HttpPatch("UpdateProgress/{id}")]
-    [ProducesResponseType(StatusCodes.Status202Accepted)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<ProjectReadDto> UpdateProgress(Guid id, [FromBody] ProjectUpdateProgressDto updateProjectProgress)
-    {
-        var findProject = _projectService.FindOne(id);
-        if (findProject == null) return NotFound();
-        ProjectReadDto? updatedProject = _projectService.UpdateProgress(id, updateProjectProgress);
-        return Accepted(updatedProject);
-    }
 }

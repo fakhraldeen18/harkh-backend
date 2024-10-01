@@ -71,12 +71,4 @@ public class ProjectService : IProjectService
         _projectRepository.UpdateOne(project);
         return _mapper.Map<ProjectReadDto>(project);
     }
-    public ProjectReadDto? UpdateProgress(Guid id, ProjectUpdateProgressDto updatedProject)
-    {
-        Project? project = _projectRepository.FindOne(id);
-        if (project == null) return null;
-        project.Progress = updatedProject.Progress;
-        _projectRepository.UpdateOne(project);
-        return _mapper.Map<ProjectReadDto>(project);
-    }
 }

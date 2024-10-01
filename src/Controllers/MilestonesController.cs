@@ -53,13 +53,4 @@ public class MilestonesController : CustomController
         var updatedMilestone = _milestoneService.UpdateOne(id, updateMilestone);
         return Accepted(updatedMilestone);
     }
-
-    // [HttpPatch("UpdateProgress/{id}")]
-    // public ActionResult<MilestoneReadDto> UpdateProgress([FromBody] MilestoneUpdateProgressDto updateMilestone, Guid id)
-    // {
-    //     var milestone = _milestoneService.FindOne(id);
-    //     if (milestone == null) return NotFound();
-    //     var updatedMilestone = _milestoneService.UpdateProgress(id, updateMilestone);
-    //     return Accepted(updatedMilestone);
-    // }
 }

@@ -1,3 +1,4 @@
+using System.Data;
 using Harkh_backend.src.Abstractions;
 using Harkh_backend.src.Databases;
 using Harkh_backend.src.Entities;
@@ -51,7 +52,7 @@ public class MilestoneRepository : IMilestoneRepository
         _databaseContext.SaveChanges();
         return updatedMilestone;
     }
-    public Milestone? UpdateProgress(Guid id)
+    public Milestone? UpdateProgress(Guid? id)
     {
         Milestone? milestone = _milestones.FirstOrDefault(m => m.Id == id);
         if (milestone == null) return null;
@@ -72,6 +73,7 @@ public class MilestoneRepository : IMilestoneRepository
 
         Console.WriteLine($"progressOfMilestone: {totalProgress}%");
         milestone.Progress = (int)Math.Round(totalProgress);
+        milestone.UpdateAt = DateTime.Now;
         _milestones.Update(milestone);
         _databaseContext.SaveChanges();
         return milestone;

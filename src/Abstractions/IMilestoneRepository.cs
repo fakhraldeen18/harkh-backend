@@ -8,7 +8,7 @@ public interface IMilestoneRepository
     public Milestone? FindOne(Guid? id);
     public Milestone CreateOne(Milestone newMilestone);
     public Milestone UpdateOne(Milestone updatedMilestone);
-    public Milestone? UpdateProgress(Guid id);
+    public Milestone? UpdateProgress(Guid? id);
     public Milestone? DeleteOne(Guid id);
 
 }

@@ -9,13 +9,15 @@ public class TaskService : ITaskService
 {
     private readonly ITaskRepository _taskRepository;
     private readonly IMilestoneRepository _milestoneRepository;
+    private readonly IProjectRepository _projectRepository;
     private readonly IMapper _mapper;
 
-    public TaskService(ITaskRepository taskRepository, IMapper mapper, IMilestoneRepository milestoneRepository)
+    public TaskService(ITaskRepository taskRepository, IMapper mapper, IMilestoneRepository milestoneRepository, IProjectRepository projectRepository)
     {
         _taskRepository = taskRepository;
         _milestoneRepository = milestoneRepository;
         _mapper = mapper;
+        _projectRepository = projectRepository;
     }
 
     public TaskReadDto? CreateOne(TaskCreteDto newTask)
@@ -23,9 +25,11 @@ public class TaskService : ITaskService
         Entities.Task ReadTask = _mapper.Map<Entities.Task>(newTask);
         if (ReadTask == null) return null;
         _taskRepository.CreateOne(ReadTask);
+        if (ReadTask.MilestoneId == null) return _mapper.Map<TaskReadDto>(ReadTask); ;
         Milestone? milestone = _milestoneRepository.FindOne(ReadTask.MilestoneId);
-        if (milestone?.Id == null) return _mapper.Map<TaskReadDto>(ReadTask); ;
-        _milestoneRepository.UpdateProgress(milestone.Id);
+        _milestoneRepository.UpdateProgress(milestone?.Id);
+        Project? project = _projectRepository.FindOne(milestone!.ProjectId);
+        _projectRepository.UpdateProgress(project!.Id);
         return _mapper.Map<TaskReadDto>(ReadTask);
     }
 
@@ -63,9 +67,11 @@ public class TaskService : ITaskService
         Task.DueDate = updatedTask.DueDate;
         Task.UpdateAt = updatedTask.UpdateAt;
         _taskRepository.UpdateOne(Task);
+        if (Task.MilestoneId == null) return _mapper.Map<TaskReadDto>(Task);
         Milestone? milestone = _milestoneRepository.FindOne(Task.MilestoneId);
-        if (milestone?.Id == null) return _mapper.Map<TaskReadDto>(Task);
-        _milestoneRepository.UpdateProgress(milestone.Id);
+        _milestoneRepository.UpdateProgress(milestone?.Id);
+        Project? project = _projectRepository.FindOne(milestone!.ProjectId);
+        _projectRepository.UpdateProgress(project!.Id);
         return _mapper.Map<TaskReadDto>(Task);
     }
 
@@ -83,9 +89,11 @@ public class TaskService : ITaskService
         if (Task == null) return null;
         Task.Progress = updatedProgress.Progress;
         _taskRepository.UpdateOne(Task);
+        if (Task.MilestoneId == null) return _mapper.Map<TaskReadDto>(Task);
         Milestone? milestone = _milestoneRepository.FindOne(Task.MilestoneId);
-        if (milestone?.Id == null) return _mapper.Map<TaskReadDto>(Task);
-        _milestoneRepository.UpdateProgress(milestone.Id);
+        _milestoneRepository.UpdateProgress(milestone?.Id);
+        Project? project = _projectRepository.FindOne(milestone!.ProjectId);
+        _projectRepository.UpdateProgress(project!.Id);
         return _mapper.Map<TaskReadDto>(Task);
     }
 }

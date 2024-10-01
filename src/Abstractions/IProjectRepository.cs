@@ -7,5 +7,6 @@ public interface IProjectRepository
     public Project? FindOne(Guid id);
     public Project CreateOne(Project newProject);
     public Project UpdateOne(Project updatedProject);
+    public Project? UpdateProgress(Guid id);
     public Project? DeleteOne(Guid id);
 }

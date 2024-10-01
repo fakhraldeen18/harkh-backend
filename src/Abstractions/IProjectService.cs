@@ -12,6 +12,4 @@ public interface IProjectService
     public bool DeleteOne(Guid id);
     public ProjectReadDto? UpdateOne(Guid id, ProjectUpdateDto updatedProject);
     public ProjectReadDto? UpdateStatus(Guid id, ProjectUpdateStatusDto updatedProject);
-    public ProjectReadDto? UpdateProgress(Guid id, ProjectUpdateProgressDto updatedProject);
-
 }

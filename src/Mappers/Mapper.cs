@@ -22,5 +22,8 @@ public class Mapper : Profile
         
         CreateMap<Milestone, MilestoneReadDto>();
         CreateMap<MilestoneCreateDto, Milestone>();
+
+        CreateMap<Document, DocumentReadDto>();
+        CreateMap<DocumentCreateDto, Document>();
     }
 }

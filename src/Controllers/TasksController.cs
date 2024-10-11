@@ -7,10 +7,12 @@ namespace Harkh_backend.src.Controllers;
 public class TasksController : CustomController
 {
     private readonly ITaskService _TaskService;
+    private readonly IDocumentService _documentService;
 
-    public TasksController(ITaskService TaskService)
+    public TasksController(ITaskService TaskService, IDocumentService documentService)
     {
         _TaskService = TaskService;
+        _documentService = documentService;
     }
 
     [HttpGet]
@@ -80,5 +82,14 @@ public class TasksController : CustomController
         if (findTask == null) return NotFound();
         TaskReadDto? updatedTask = _TaskService.UpdateProgress(Id, updateProgress);
         return Accepted(updatedTask);
+    }
+    [HttpPost("CreteDocument")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<DocumentReadDto> CreteDocument([FromBody] DocumentCreateDto newDocument)
+    {
+        if (newDocument == null) return BadRequest();
+        DocumentReadDto? createdDocument = _documentService.CreateOne(newDocument);
+        return CreatedAtAction(nameof(CreteDocument), createdDocument);
     }
 }

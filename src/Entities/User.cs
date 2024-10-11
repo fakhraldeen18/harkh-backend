@@ -24,5 +24,6 @@ public class User
     public DateTime UpdatedAt { get; set; }
     // Navigation properties
     public List<Task> Tasks { get; set; }
+    public List<Document> Documents { get; set; }
     public Project Project { get; set; }
 }

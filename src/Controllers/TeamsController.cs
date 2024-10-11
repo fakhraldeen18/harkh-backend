@@ -14,6 +14,7 @@ public class TeamsController : CustomController
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<TeamReadDto>> FindAll()
     {
         IEnumerable<TeamReadDto> teams = _teamService.FindAll();
@@ -21,6 +22,8 @@ public class TeamsController : CustomController
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<TeamReadDto> FindOne(Guid id)
     {
         TeamReadDto? team = _teamService.FindOne(id);
@@ -29,6 +32,8 @@ public class TeamsController : CustomController
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public ActionResult<TeamReadDto> CreateOne([FromBody] TeamCreateDto newTeam)
     {
         if (newTeam == null) return BadRequest();
@@ -38,6 +43,8 @@ public class TeamsController : CustomController
 
 
     [HttpPatch("{id}")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<TeamReadDto> UpdateOne([FromBody] TeamUpdateDto updateTeam, Guid id)
     {
         var team = _teamService.FindOne(id);
@@ -47,6 +54,8 @@ public class TeamsController : CustomController
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult DeleteOne(Guid id)
     {
         TeamReadDto? team = _teamService.FindOne(id);

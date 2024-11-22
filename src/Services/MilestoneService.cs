@@ -21,23 +21,45 @@ public class MilestoneService : IMilestoneService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<MilestoneReadDto> CreateOne(MilestoneCreateDto newMilestone)
+    public async Task<MilestoneReadDto?> CreateOne(MilestoneCreateDto newMilestone)
     {
-        Milestone milestone = _mapper.Map<Milestone>(newMilestone);
-        await _milestoneRepository.CreateOne(milestone);
-        if (milestone?.ProjectId == null) return _mapper.Map<MilestoneReadDto>(milestone);
-        await _projectRepository.UpdateProgress(milestone.ProjectId);
-        await _unitOfWork.Complete();
-        return _mapper.Map<MilestoneReadDto>(milestone);
+        if (newMilestone == null) return null;
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            Milestone milestone = _mapper.Map<Milestone>(newMilestone);
+            await _milestoneRepository.CreateOne(milestone);
+            await _unitOfWork.Complete();
+            if (milestone?.ProjectId == null) return _mapper.Map<MilestoneReadDto>(milestone);
+            await _projectRepository.UpdateProgress(milestone.ProjectId);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<MilestoneReadDto>(milestone);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 
     public async Task<bool> DeleteOne(Guid id)
     {
         Milestone? milestone = await _milestoneRepository.FindOne(id);
         if (milestone == null) return false;
-        _milestoneRepository.DeleteOne(milestone);
-        await _unitOfWork.Complete();
-        return true;
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            _milestoneRepository.DeleteOne(milestone);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return true;
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return false;
+        }
     }
 
     public async Task<IEnumerable<MilestoneReadDto>> FindAll()
@@ -57,14 +79,25 @@ public class MilestoneService : IMilestoneService
     {
         Milestone? milestone = await _milestoneRepository.FindOne(id);
         if (milestone == null) return null;
-        milestone.ProjectId = updatedMilestone.ProjectId;
-        milestone.Name = updatedMilestone.Name;
-        milestone.Progress = updatedMilestone.Progress;
-        milestone.DueDate = updatedMilestone.DueDate;
-        _milestoneRepository.UpdateOne(milestone);
-        if (milestone?.ProjectId == null) return _mapper.Map<MilestoneReadDto>(milestone);
-        await _projectRepository.UpdateProgress(milestone.ProjectId);
-        await _unitOfWork.Complete();
-        return _mapper.Map<MilestoneReadDto>(milestone);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            milestone.ProjectId = updatedMilestone.ProjectId;
+            milestone.Name = updatedMilestone.Name;
+            milestone.Progress = updatedMilestone.Progress;
+            milestone.DueDate = updatedMilestone.DueDate;
+            _milestoneRepository.UpdateOne(milestone);
+            await _unitOfWork.Complete();
+            if (milestone?.ProjectId == null) return _mapper.Map<MilestoneReadDto>(milestone);
+            await _projectRepository.UpdateProgress(milestone.ProjectId);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<MilestoneReadDto>(milestone);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 }

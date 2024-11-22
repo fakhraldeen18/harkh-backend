@@ -100,7 +100,7 @@ public class TaskService : ITaskService
         Milestone? milestone = await _milestoneRepository.FindOne(Task.MilestoneId);
         await _milestoneRepository.UpdateProgress(milestone?.Id);
         Project? project = _projectRepository.FindOne(milestone!.ProjectId);
-        _projectRepository.UpdateProgress(project!.Id);
+        await _projectRepository.UpdateProgress(project!.Id);
         await _unitOfWork.Complete();
         return _mapper.Map<TaskReadDto>(Task);
     }

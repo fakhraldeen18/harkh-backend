@@ -4,11 +4,11 @@ namespace Harkh_backend.src.Abstractions;
 
 public interface IMilestoneService
 {
-    public IEnumerable<MilestoneReadDto> FindAll();
-    public MilestoneReadDto? FindOne(Guid id);
-    public MilestoneReadDto CreateOne(MilestoneCreateDto newMilestone);
-    public bool DeleteOne(Guid id);
-    public MilestoneReadDto? UpdateOne(Guid id, MilestoneUpdateDto updatedMilestone);
-   // public MilestoneReadDto UpdateStatus(Guid id, MilestoneUpdateStatusDto updatedStatus);
-   // public MilestoneReadDto? UpdateProgress(Guid id);
+    public Task<IEnumerable<MilestoneReadDto>> FindAll();
+    public Task<MilestoneReadDto?> FindOne(Guid id);
+    public Task<MilestoneReadDto> CreateOne(MilestoneCreateDto newMilestone);
+    public Task<bool> DeleteOne(Guid id);
+    public Task<MilestoneReadDto?> UpdateOne(Guid id, MilestoneUpdateDto updatedMilestone);
+    // public MilestoneReadDto UpdateStatus(Guid id, MilestoneUpdateStatusDto updatedStatus);
+    // public MilestoneReadDto? UpdateProgress(Guid id);
 }

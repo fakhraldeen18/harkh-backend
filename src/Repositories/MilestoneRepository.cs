@@ -2,6 +2,7 @@ using System.Data;
 using Harkh_backend.src.Abstractions;
 using Harkh_backend.src.Databases;
 using Harkh_backend.src.Entities;
+using Harkh_backend.src.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace Harkh_backend.src.Repositories;
@@ -11,52 +12,47 @@ public class MilestoneRepository : IMilestoneRepository
 
     private readonly DbSet<Milestone> _milestones;
     private readonly DatabaseContext _databaseContext;
-    private readonly ITaskRepository _taskRepository;
+    private readonly DbSet<Entities.Task> _taskRepository;
 
-    public MilestoneRepository(DatabaseContext databaseContext, ITaskRepository taskRepository)
+    public MilestoneRepository(DatabaseContext databaseContext, IUnitOfWork unitOfWork)
     {
         _databaseContext = databaseContext;
         _milestones = databaseContext.Milestones;
-        _taskRepository = taskRepository;
+        _taskRepository = _databaseContext.Tasks;
     }
 
-    public Milestone CreateOne(Milestone newMilestone)
+    public async Task<Milestone> CreateOne(Milestone newMilestone)
     {
-        _milestones.Add(newMilestone);
-        _databaseContext.SaveChanges();
+        await _milestones.AddAsync(newMilestone);
         return newMilestone;
     }
 
-    public Milestone? DeleteOne(Guid id)
+    public Milestone? DeleteOne(Milestone milestone)
     {
-        Milestone? FindMilestone = _milestones.FirstOrDefault(m => m.Id == id);
-        if (FindMilestone == null) return null;
-        _milestones.Remove(FindMilestone);
-        _databaseContext.SaveChanges();
-        return FindMilestone;
+        _milestones.Remove(milestone);
+        return milestone;
     }
 
-    public IEnumerable<Milestone> FindAll()
+    public async Task<IEnumerable<Milestone>> FindAll()
     {
-        return _milestones;
+        return await _milestones.ToListAsync();
     }
 
-    public Milestone? FindOne(Guid? id)
+    public async Task<Milestone?> FindOne(Guid? id)
     {
-        return _milestones.FirstOrDefault(m => m.Id == id);
+        return await _milestones.FirstOrDefaultAsync(m => m.Id == id);
     }
 
     public Milestone UpdateOne(Milestone updatedMilestone)
     {
         _milestones.Update(updatedMilestone);
-        _databaseContext.SaveChanges();
         return updatedMilestone;
     }
-    public Milestone? UpdateProgress(Guid? id)
+    public async Task<Milestone?> UpdateProgress(Guid? id)
     {
-        Milestone? milestone = _milestones.FirstOrDefault(m => m.Id == id);
+        Milestone? milestone = await _milestones.FirstOrDefaultAsync(m => m.Id == id);
         if (milestone == null) return null;
-        var tasks = _taskRepository.FindAll();
+        var tasks = _taskRepository;
         var tasksWithMilestone = tasks.Where(task => task.MilestoneId == id);
         var numberOfTasks = tasks.Where(task => task.MilestoneId == id).Count();
         Console.WriteLine($"tasks {numberOfTasks}");
@@ -75,7 +71,6 @@ public class MilestoneRepository : IMilestoneRepository
         milestone.Progress = (int)Math.Round(totalProgress);
         milestone.UpdateAt = DateTime.Now;
         _milestones.Update(milestone);
-        _databaseContext.SaveChanges();
         return milestone;
     }
 }

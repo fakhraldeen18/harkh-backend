@@ -21,6 +21,8 @@ public class TaskReadDto
     [Required]
     public DateTime CreatedAt { get; set; }
     [Required]
+    public DateTime StartDate { get; set; }
+    [Required]
     public DateTime DueDate { get; set; }
     [Required]
     public DateTime UpdateAt { get; set; }
@@ -39,6 +41,10 @@ public class TaskCreteDto
     [Required]
     public Priority Priority { get; set; }
     [Required]
+    public DateTime StartDate { get; set; }
+    [Required]
+    public DateTime DueDate { get; set; }
+    [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 }
 public class TaskUpdateDto
@@ -52,6 +58,8 @@ public class TaskUpdateDto
     public Status Status { get; set; }
     [Required]
     public Priority Priority { get; set; }
+    [Required]
+    public DateTime StartDate { get; set; }
     [Required]
     public DateTime DueDate { get; set; }
     [Required]

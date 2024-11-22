@@ -7,9 +7,12 @@ public class DatabaseContext : DbContext // DbContext is built in class to give 
     public DbSet<User> Users { get; set; }
     public DbSet<Entities.Task> Tasks { get; set; }
     public DbSet<Project> Projects { get; set; }
-    public DbSet<Team> Teams { get; set; }
     public DbSet<Milestone> Milestones { get; set; }
     public DbSet<Document> Documents { get; set; }
+    public DbSet<Skill> Skills { get; set; }
+    public DbSet<Experience> Experiences { get; set; }
+    public DbSet<UserSkill> UserSkills { get; set; }
+    public DbSet<UserProject> UserProjects { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 

@@ -20,7 +20,6 @@ public class ProjectRepository : IProjectRepository
     public Project CreateOne(Project newProject)
     {
         _projects.Add(newProject);
-        _databaseContext.SaveChanges();
         return newProject;
     }
 
@@ -29,7 +28,6 @@ public class ProjectRepository : IProjectRepository
         Project? FindProject = FindOne(id);
         if (FindProject == null) return null;
         _projects.Remove(FindProject);
-        _databaseContext.SaveChanges();
         return FindProject;
     }
 
@@ -46,15 +44,14 @@ public class ProjectRepository : IProjectRepository
     public Project UpdateOne(Project updatedProject)
     {
         _projects.Update(updatedProject);
-        _databaseContext.SaveChanges();
         return updatedProject;
     }
 
-    public Project? UpdateProgress(Guid id)
+    public async Task<Project?> UpdateProgress(Guid id)
     {
-        Project? project = _projects.FirstOrDefault(p => p.Id == id);
+        Project? project = await _projects.FirstOrDefaultAsync(p => p.Id == id);
         if (project == null) return null;
-        var milestones = _milestoneRepository.FindAll();
+        var milestones = await _milestoneRepository.FindAll();
         var milestonesWithProject = milestones.Where(milestone => milestone.ProjectId == id);
         var numberOfMilestones = milestonesWithProject.Count();
         Console.WriteLine($"milestones {numberOfMilestones}");
@@ -73,7 +70,6 @@ public class ProjectRepository : IProjectRepository
         project.Progress = (int)Math.Round(totalProgress);
         project.UpdateAt = DateTime.Now;
         _projects.Update(project);
-        _databaseContext.SaveChanges();
         return project;
     }
 }

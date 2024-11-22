@@ -17,13 +17,15 @@ public class Mapper : Profile
         CreateMap<Project, ProjectReadDto>();
         CreateMap<ProjectCreateDto, Project>();
 
-        CreateMap<Team, TeamReadDto>();
-        CreateMap<TeamCreateDto, Team>();
-        
         CreateMap<Milestone, MilestoneReadDto>();
         CreateMap<MilestoneCreateDto, Milestone>();
 
         CreateMap<Document, DocumentReadDto>();
         CreateMap<DocumentCreateDto, Document>();
+
+        CreateMap<Experience, ExperienceReadDto>();
+
+        CreateMap<Skill, SkillReadDto>();
+        CreateMap<SkillCreateDto, Skill>();
     }
 }

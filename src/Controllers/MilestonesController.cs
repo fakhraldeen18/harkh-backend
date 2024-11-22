@@ -16,18 +16,18 @@ public class MilestonesController : CustomController
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<MilestoneReadDto>> FindAll()
+    public async Task<ActionResult<IEnumerable<MilestoneReadDto>>> FindAll()
     {
-        var milestones = _milestoneService.FindAll();
+        var milestones = await _milestoneService.FindAll();
         return Ok(milestones);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<MilestoneReadDto> FindOne(Guid id)
+    public async Task<ActionResult<MilestoneReadDto>> FindOne(Guid id)
     {
-        var findMilestone = _milestoneService.FindOne(id);
+        var findMilestone =  await _milestoneService.FindOne(id);
         if (findMilestone == null) return NotFound();
         return Ok(findMilestone);
     }
@@ -35,33 +35,33 @@ public class MilestonesController : CustomController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<MilestoneReadDto> CreateOne([FromBody] MilestoneCreateDto newMilestone)
+    public async Task<ActionResult<MilestoneReadDto>> CreateOne([FromBody] MilestoneCreateDto newMilestone)
     {
         if (newMilestone == null) return BadRequest();
-        var createMilestone = _milestoneService.CreateOne(newMilestone);
+        var createMilestone = await _milestoneService.CreateOne(newMilestone);
         return CreatedAtAction(nameof(CreateOne), createMilestone);
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult DeleteOne(Guid id)
+    public async Task<ActionResult> DeleteOne(Guid id)
     {
-        var findMilestone = _milestoneService.FindOne(id);
+        var findMilestone = await _milestoneService.FindOne(id);
         if (findMilestone == null) return NotFound();
-        _milestoneService.DeleteOne(id);
+        await _milestoneService.DeleteOne(id);
         return NoContent();
     }
 
     [HttpPatch("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<MilestoneReadDto> UpdateOne(Guid id, [FromBody] MilestoneUpdateDto updateMilestone)
+    public async Task<ActionResult<MilestoneReadDto>> UpdateOne(Guid id, [FromBody] MilestoneUpdateDto updateMilestone)
     {
-        var milestone = _milestoneService.FindOne(id);
+        var milestone = await _milestoneService.FindOne(id);
         if (milestone == null) return NotFound();
         var updatedMilestone = _milestoneService.UpdateOne(id, updateMilestone);
-        return Accepted(updatedMilestone);
+        return Accepted(await updatedMilestone);
     }
     [HttpPost("CreteDocument")]
     [ProducesResponseType(StatusCodes.Status201Created)]

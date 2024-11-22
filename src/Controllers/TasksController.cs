@@ -36,10 +36,10 @@ public class TasksController : CustomController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<TaskReadDto> CreateOne([FromBody] TaskCreteDto newTask)
+    public async Task<ActionResult<TaskReadDto>> CreateOne([FromBody] TaskCreteDto newTask)
     {
         if (newTask == null) return BadRequest();
-        TaskReadDto? createdTask = _TaskService.CreateOne(newTask);
+        TaskReadDto? createdTask = await _TaskService.CreateOne(newTask);
         return CreatedAtAction(nameof(CreateOne), createdTask);
     }
 
@@ -55,32 +55,32 @@ public class TasksController : CustomController
     [HttpPatch("{Id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<TaskReadDto> UpdateOne(Guid Id, [FromBody] TaskUpdateDto updateTask)
+    public async Task<ActionResult<TaskReadDto>> UpdateOne(Guid Id, [FromBody] TaskUpdateDto updateTask)
     {
         var findTask = _TaskService.FindOne(Id);
         if (findTask == null) return NotFound();
-        TaskReadDto? updatedTask = _TaskService.UpdateOne(Id, updateTask);
+        TaskReadDto? updatedTask = await _TaskService.UpdateOne(Id, updateTask);
         return Accepted(updatedTask);
     }
 
     [HttpPatch("UpdateStatus/{Id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<TaskReadDto> UpdateStatus(Guid Id, [FromBody] TaskUpdateStatusDto updateStatus)
+    public async Task<ActionResult<TaskReadDto>> UpdateStatus(Guid Id, [FromBody] TaskUpdateStatusDto updateStatus)
     {
         var findTask = _TaskService.FindOne(Id);
         if (findTask == null) return NotFound();
-        TaskReadDto? updatedTask = _TaskService.UpdateStatus(Id, updateStatus);
+        TaskReadDto? updatedTask = await _TaskService.UpdateStatus(Id, updateStatus);
         return Accepted(updatedTask);
     }
     [HttpPatch("UpdateProgress/{Id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<TaskReadDto> UpdateProgress(Guid Id, [FromBody] TaskUpdateProgressDto updateProgress)
+    public async Task<ActionResult<TaskReadDto>> UpdateProgress(Guid Id, [FromBody] TaskUpdateProgressDto updateProgress)
     {
         var findTask = _TaskService.FindOne(Id);
         if (findTask == null) return NotFound();
-        TaskReadDto? updatedTask = _TaskService.UpdateProgress(Id, updateProgress);
+        TaskReadDto? updatedTask = await _TaskService.UpdateProgress(Id, updateProgress);
         return Accepted(updatedTask);
     }
     [HttpPost("CreteDocument")]

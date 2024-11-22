@@ -10,6 +10,7 @@ using System.Text;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
 using Harkh_backend.src.Enums;
+using Harkh_backend.src.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,24 +87,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddControllers();
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-
-builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-builder.Services.AddScoped<ITaskService, TaskService>();
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+
+builder.Services.AddScoped<IExperienceService, ExperienceService>();
+
+builder.Services.AddScoped<ISkillService, SkillService>();
+
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 
-builder.Services.AddScoped<ITeamRepository, TeamRepository>();
-builder.Services.AddScoped<ITeamService, TeamService>();
 
 builder.Services.AddScoped<IMilestoneRepository, MilestoneRepository>();
 builder.Services.AddScoped<IMilestoneService, MilestoneService>();
 
-builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
-builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

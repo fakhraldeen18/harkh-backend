@@ -2,6 +2,7 @@ using AutoMapper;
 using Harkh_backend.src.Abstractions;
 using Harkh_backend.src.DTOs;
 using Harkh_backend.src.Entities;
+using Harkh_backend.src.UnitOfWork;
 
 namespace Harkh_backend.src.Services;
 
@@ -9,11 +10,14 @@ public class ProjectService : IProjectService
 {
     private readonly IMapper _mapper;
     private readonly IProjectRepository _projectRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ProjectService(IMapper mapper, IProjectRepository projectRepository)
+
+    public ProjectService(IMapper mapper, IProjectRepository projectRepository, IUnitOfWork unitOfWork)
     {
         _projectRepository = projectRepository;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
     public ProjectReadDto? CreateOne(ProjectCreateDto newProject)
@@ -21,6 +25,7 @@ public class ProjectService : IProjectService
         Project? project = _mapper.Map<Project>(newProject);
         if (project == null) return null;
         _projectRepository.CreateOne(project);
+        _unitOfWork.Complete();
         return _mapper.Map<ProjectReadDto>(project);
     }
 
@@ -29,6 +34,7 @@ public class ProjectService : IProjectService
         Project? findProject = _projectRepository.FindOne(id);
         if (findProject == null) return false;
         _projectRepository.DeleteOne(id);
+        _unitOfWork.Complete();
         return true;
     }
 
@@ -59,6 +65,7 @@ public class ProjectService : IProjectService
         project.Status = updatedProject.Status;
         project.UpdateAt = updatedProject.UpdateAt;
         _projectRepository.UpdateOne(project);
+        _unitOfWork.Complete();
         return _mapper.Map<ProjectReadDto>(project);
     }
 
@@ -69,6 +76,7 @@ public class ProjectService : IProjectService
         project.Status = updatedProject.Status;
         project.UpdateAt = updatedProject.UpdateAt;
         _projectRepository.UpdateOne(project);
+        _unitOfWork.Complete();
         return _mapper.Map<ProjectReadDto>(project);
     }
 }

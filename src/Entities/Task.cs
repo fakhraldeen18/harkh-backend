@@ -20,6 +20,8 @@ public class Task
     [Required]
     public DateTime CreatedAt { get; set; }
     [Required]
+    public DateTime StartDate { get; set; }
+    [Required]
     public DateTime DueDate { get; set; }
     [Required]
     public DateTime UpdateAt { get; set; }

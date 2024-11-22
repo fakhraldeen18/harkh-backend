@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Harkh_backend.src.Enums;
+using Harkh_backend.src.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Harkh_backend.src.Entities;
@@ -9,7 +10,6 @@ namespace Harkh_backend.src.Entities;
 public class User
 {
     public Guid Id { get; set; }
-    public Guid TeamId { get; set; } // foreign key
     [Required]
     public string Name { get; set; }
     [Required]
@@ -17,13 +17,19 @@ public class User
     [Required, EmailAddress]
     public string Email { get; set; }
     [Required]
+    public DateTime BirthDate { get; set; }
+    [Required]
+    public string Position { get; set; }
+    [Required]
     public string Password { get; set; }
     [Required]
     public string Phone { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
     // Navigation properties
+    public List<Project> Project { get; set; }
     public List<Task> Tasks { get; set; }
     public List<Document> Documents { get; set; }
-    public Project Project { get; set; }
+    public List<Experience> Experiences { get; set; }
+    public List<UserSkill> UserSkills { get; set; }
+    public List<UserProject> UserProjects { get; set; }
 }

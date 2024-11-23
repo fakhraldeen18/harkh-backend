@@ -22,19 +22,39 @@ public class DocumentService : IDocumentService
     public async Task<DocumentReadDto?> CreateOne(DocumentCreateDto newDocument)
     {
         if (newDocument == null) return null;
-        Document createDocument = _mapper.Map<Document>(newDocument);
-        await _documentRepository.CreateOne(createDocument);
-        await _unitOfWork.Complete();
-        return _mapper.Map<DocumentReadDto>(createDocument);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            Document createDocument = _mapper.Map<Document>(newDocument);
+            await _documentRepository.CreateOne(createDocument);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<DocumentReadDto>(createDocument);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 
     public async Task<bool> DeleteOne(Guid id)
     {
         Document? document = await _documentRepository.FindOne(id);
         if (document == null) return false;
-        _documentRepository.DeleteOne(document);
-        await _unitOfWork.Complete();
-        return true;
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            _documentRepository.DeleteOne(document);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return true;
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return false;
+        }
     }
 
     public async Task<IEnumerable<DocumentReadDto>> FindAll()
@@ -54,9 +74,19 @@ public class DocumentService : IDocumentService
     {
         Document? document = await _documentRepository.FindOne(id);
         if (document == null) return null;
-        document.FileUrl = updatedDocument.FileUrl;
-        _documentRepository.UpdateOne(document);
-        await _unitOfWork.Complete();
-        return _mapper.Map<DocumentReadDto>(document);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            document.FileUrl = updatedDocument.FileUrl;
+            _documentRepository.UpdateOne(document);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<DocumentReadDto>(document);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 }

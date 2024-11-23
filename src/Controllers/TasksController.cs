@@ -17,18 +17,18 @@ public class TasksController : CustomController
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<TaskReadDto>> FindAll()
+    public async Task<ActionResult<IEnumerable<TaskReadDto>>> FindAll()
     {
-        IEnumerable<TaskReadDto>? Tasks = _TaskService.FindAll();
+        IEnumerable<TaskReadDto>? Tasks = await _TaskService.FindAll();
         return Ok(Tasks);
     }
 
     [HttpGet("{Id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<TaskReadDto> FindOne(Guid Id)
+    public async Task<ActionResult<TaskReadDto>> FindOne(Guid Id)
     {
-        var findTask = _TaskService.FindOne(Id);
+        var findTask = await _TaskService.FindOne(Id);
         if (findTask == null) return NotFound();
         return Ok(findTask);
     }
@@ -44,11 +44,11 @@ public class TasksController : CustomController
     }
 
     [HttpDelete("{Id}")]
-    public ActionResult DeleteOne(Guid Id)
+    public async Task<ActionResult> DeleteOne(Guid Id)
     {
-        var findTask = _TaskService.FindOne(Id);
+        var findTask = await _TaskService.FindOne(Id);
         if (findTask == null) return NotFound();
-        _TaskService.DeleteOne(Id);
+        await _TaskService.DeleteOne(Id);
         return NoContent();
     }
 
@@ -86,10 +86,10 @@ public class TasksController : CustomController
     [HttpPost("CreteDocument")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<DocumentReadDto> CreteDocument([FromBody] DocumentCreateDto newDocument)
+    public async Task<ActionResult<DocumentReadDto>> CreteDocument([FromBody] DocumentCreateDto newDocument)
     {
         if (newDocument == null) return BadRequest();
-        DocumentReadDto? createdDocument = _documentService.CreateOne(newDocument);
+        DocumentReadDto? createdDocument = await _documentService.CreateOne(newDocument);
         return CreatedAtAction(nameof(CreteDocument), createdDocument);
     }
 }

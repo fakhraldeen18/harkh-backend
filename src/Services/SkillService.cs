@@ -22,10 +22,20 @@ public class SkillService : ISkillService
     public async Task<SkillReadDto?> CreateOne(SkillCreateDto newSkill)
     {
         if (newSkill == null) return null;
-        var skill = _mapper.Map<Skill>(newSkill);
-        await _skillRepository.CreateOne(skill);
-        await _unitOfWork.Complete();
-        return _mapper.Map<SkillReadDto>(skill);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            var skill = _mapper.Map<Skill>(newSkill);
+            await _skillRepository.CreateOne(skill);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<SkillReadDto>(skill);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 
     public async Task<IEnumerable<SkillReadDto>> FindAll()
@@ -38,9 +48,19 @@ public class SkillService : ISkillService
     {
         var findSkill = await _skillRepository.FindOne(id);
         if (findSkill == null) return null;
-        findSkill.Name = updateSkill.Name;
-        _skillRepository.UpdateOne(findSkill);
-        await _unitOfWork.Complete();
-        return _mapper.Map<SkillReadDto>(findSkill);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            findSkill.Name = updateSkill.Name;
+            _skillRepository.UpdateOne(findSkill);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<SkillReadDto>(findSkill);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 }

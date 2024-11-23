@@ -14,18 +14,18 @@ public class DocumentController : CustomController
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<DocumentReadDto>> FindAll()
+    public async Task<ActionResult<IEnumerable<DocumentReadDto>>> FindAll()
     {
-        var documents = _documentService.FindAll();
+        var documents = await _documentService.FindAll();
         return Ok(documents);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DocumentReadDto> FindOne(Guid id)
+    public async Task<ActionResult<DocumentReadDto>> FindOne(Guid id)
     {
-        var findDocument = _documentService.FindOne(id);
+        var findDocument = await _documentService.FindOne(id);
         if (findDocument == null) return NotFound();
         return Ok(findDocument);
     }
@@ -33,32 +33,32 @@ public class DocumentController : CustomController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<DocumentReadDto> CreateOne([FromBody] DocumentCreateDto newCreateDocument)
+    public async Task<ActionResult<DocumentReadDto>> CreateOne([FromBody] DocumentCreateDto newCreateDocument)
     {
         if (newCreateDocument == null) return BadRequest();
-        DocumentReadDto? createdDocument = _documentService.CreateOne(newCreateDocument);
+        DocumentReadDto? createdDocument = await _documentService.CreateOne(newCreateDocument);
         return CreatedAtAction(nameof(CreateOne), createdDocument);
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult DeleteOne(Guid id)
+    public async Task<ActionResult> DeleteOne(Guid id)
     {
         var findDocument = _documentService.FindOne(id);
         if (findDocument == null) return NotFound();
-        _documentService.DeleteOne(id);
+        await _documentService.DeleteOne(id);
         return NoContent();
     }
 
     [HttpPatch]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DocumentReadDto> UpdateOne(Guid id, DocumentUpdateDto updateDocument)
+    public async Task<ActionResult<DocumentReadDto>> UpdateOne(Guid id, DocumentUpdateDto updateDocument)
     {
-        var document = _documentService.FindOne(id);
+        var document = await _documentService.FindOne(id);
         if (document == null) return NotFound();
-        var updatedDocument = _documentService.UpdateOne(id, updateDocument);
+        var updatedDocument = await _documentService.UpdateOne(id, updateDocument);
         return Accepted(updatedDocument);
     }
 }

@@ -14,28 +14,26 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         data = _databaseContext.Set<T>();
     }
 
-    public T CreateOne(T newObj)
+    public async Task<T> CreateOne(T newObj)
     {
-        data.Add(newObj);
+        await data.AddAsync(newObj);
         return newObj;
     }
 
-    public T? DeleteOne(Guid id)
+    public T? DeleteOne(T Obj)
     {
-        T? findObj = FindOne(id);
-        if (findObj == null) return null;
-        data.Remove(findObj);
-        return findObj;
+        data.Remove(Obj);
+        return Obj;
     }
 
-    public IEnumerable<T> FindAll()
+    public async Task<IEnumerable<T>> FindAll()
     {
-        return data;
+        return await data.ToListAsync();
     }
 
-    public T? FindOne(Guid id)
+    public async Task<T?> FindOne(Guid id)
     {
-        T? obj = data.Find(id);
+        T? obj = await data.FindAsync(id);
         return obj;
     }
 
@@ -54,7 +52,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     //     var obj = query.SingleOrDefault(match);
     //     return obj;
     // }
-    
+
     // public T? Find(Expression<Func<T, bool>> match)
     // {
     //     var obj = data.SingleOrDefault(match);

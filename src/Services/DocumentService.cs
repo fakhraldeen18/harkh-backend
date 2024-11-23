@@ -19,44 +19,44 @@ public class DocumentService : IDocumentService
         _mapper = mapper;
     }
 
-    public DocumentReadDto? CreateOne(DocumentCreateDto newDocument)
+    public async Task<DocumentReadDto?> CreateOne(DocumentCreateDto newDocument)
     {
         if (newDocument == null) return null;
         Document createDocument = _mapper.Map<Document>(newDocument);
-        _documentRepository.CreateOne(createDocument);
-        _unitOfWork.Complete();
+        await _documentRepository.CreateOne(createDocument);
+        await _unitOfWork.Complete();
         return _mapper.Map<DocumentReadDto>(createDocument);
     }
 
-    public bool DeleteOne(Guid id)
+    public async Task<bool> DeleteOne(Guid id)
     {
-        Document? document = _documentRepository.FindOne(id);
+        Document? document = await _documentRepository.FindOne(id);
         if (document == null) return false;
-        _documentRepository.DeleteOne(id);
-        _unitOfWork.Complete();
+        _documentRepository.DeleteOne(document);
+        await _unitOfWork.Complete();
         return true;
     }
 
-    public IEnumerable<DocumentReadDto> FindAll()
+    public async Task<IEnumerable<DocumentReadDto>> FindAll()
     {
-        IEnumerable<Document> documents = _documentRepository.FindAll();
+        IEnumerable<Document> documents = await _documentRepository.FindAll();
         return _mapper.Map<IEnumerable<DocumentReadDto>>(documents);
     }
 
-    public DocumentReadDto? FindOne(Guid id)
+    public async Task<DocumentReadDto?> FindOne(Guid id)
     {
-        Document? document = _documentRepository.FindOne(id);
+        Document? document = await _documentRepository.FindOne(id);
         if (document == null) return null;
         return _mapper.Map<DocumentReadDto>(document);
     }
 
-    public DocumentReadDto? UpdateOne(Guid id, DocumentUpdateDto updatedDocument)
+    public async Task<DocumentReadDto?> UpdateOne(Guid id, DocumentUpdateDto updatedDocument)
     {
-        Document? document = _documentRepository.FindOne(id);
+        Document? document = await _documentRepository.FindOne(id);
         if (document == null) return null;
         document.FileUrl = updatedDocument.FileUrl;
         _documentRepository.UpdateOne(document);
-        _unitOfWork.Complete();
+        await _unitOfWork.Complete();
         return _mapper.Map<DocumentReadDto>(document);
     }
 }

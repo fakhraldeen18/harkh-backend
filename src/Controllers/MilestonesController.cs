@@ -66,10 +66,10 @@ public class MilestonesController : CustomController
     [HttpPost("CreteDocument")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<DocumentReadDto> CreteDocument([FromBody] DocumentCreateDto newDocument)
+    public async Task<ActionResult<DocumentReadDto>> CreteDocument([FromBody] DocumentCreateDto newDocument)
     {
         if (newDocument == null) return BadRequest();
-        DocumentReadDto? createdDocument = _documentService.CreateOne(newDocument);
+        DocumentReadDto? createdDocument = await _documentService.CreateOne(newDocument);
         return CreatedAtAction(nameof(CreteDocument), createdDocument);
     }
 }

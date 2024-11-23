@@ -1,6 +1,5 @@
 using Harkh_backend.src.Abstractions;
 using Harkh_backend.src.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Harkh_backend.src.Controllers;
@@ -15,39 +14,39 @@ public class UsersController : CustomController
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<UserReadDto>> FindAll()
+    public async Task<ActionResult<IEnumerable<UserReadDto>>> FindAll()
     {
-        IEnumerable<UserReadDto> Users = _userService.FindAll();
-        return Ok(Users);
+        IEnumerable<UserReadDto> users = await _userService.FindAll();
+        return Ok(users);
     }
 
     [HttpGet("{Id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<UserReadDto> FindOne(Guid Id)
+    public async Task<ActionResult<UserReadDto>> FindOne(Guid id)
     {
-        UserReadDto? FindUser = _userService.FindOne(Id);
-        if (FindUser == null) return NotFound();
-        return Ok(FindUser);
+        UserReadDto? findUser = await _userService.FindOne(id);
+        if (findUser == null) return NotFound();
+        return Ok(findUser);
     }
 
     [HttpPost("signUp")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<UserReadDto> SignUp([FromBody] UserCreateDto NewUser)
+    public async Task<ActionResult<UserReadDto>> SignUp([FromBody] UserCreateDto newUser)
     {
-        if (NewUser == null) return BadRequest();
-        UserReadDto? CreatedUser = _userService.SignUp(NewUser);
-        return CreatedAtAction(nameof(SignUp), CreatedUser);
+        if (newUser == null) return BadRequest();
+        UserReadDto? createdUser = await _userService.SignUp(newUser);
+        return CreatedAtAction(nameof(SignUp), createdUser);
     }
 
     [HttpPost("logIn")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<string?> LogIn([FromBody] UserLogInDto user)
+    public async Task<ActionResult<string?>> LogIn([FromBody] UserLogInDto user)
     {
         if (user == null) return BadRequest();
-        string? token = _userService.Login(user);
+        string? token = await _userService.Login(user);
         if (token == null) return BadRequest();
         return Ok(token);
     }
@@ -55,32 +54,32 @@ public class UsersController : CustomController
     [HttpPatch("{Id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<UserReadDto> UpdateOne(Guid Id, [FromBody] UserUpdateDto UpdateUser)
+    public async Task<ActionResult<UserReadDto>> UpdateOne(Guid id, [FromBody] UserUpdateDto updateUser)
     {
-        UserReadDto? findUser = _userService.FindOne(Id);
+        UserReadDto? findUser = await _userService.FindOne(id);
         if (findUser == null) return NotFound();
-        UserReadDto? UpdatedUser = _userService.UpdateOne(Id, UpdateUser);
-        return Accepted(UpdatedUser);
+        UserReadDto? updatedUser = await _userService.UpdateOne(id, updateUser);
+        return Accepted(updatedUser);
     }
     [HttpPatch("UpdateRole/{Id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<UserReadDto> UpdateRole(Guid Id, [FromBody] UserUpdateRoleDto UpdateUser)
+    public async Task<ActionResult<UserReadDto>> UpdateRole(Guid id, [FromBody] UserUpdateRoleDto updateUser)
     {
-        UserReadDto? findUser = _userService.FindOne(Id);
+        UserReadDto? findUser = await _userService.FindOne(id);
         if (findUser == null) return NotFound();
-        UserReadDto? UpdatedUser = _userService.UpdateRole(Id, UpdateUser);
-        return Accepted(UpdatedUser);
+        UserReadDto? updatedUser = await _userService.UpdateRole(id, updateUser);
+        return Accepted(updatedUser);
     }
 
     [HttpDelete("{Id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult DeleteOne(Guid Id)
+    public async Task<ActionResult> DeleteOne(Guid id)
     {
-        var FindUser = _userService.FindOne(Id);
-        if (FindUser == null) return NotFound();
-        _userService.DeleteOne(Id);
+        var findUser = await _userService.FindOne(id);
+        if (findUser == null) return NotFound();
+        await _userService.DeleteOne(id);
         return NoContent();
     }
 }

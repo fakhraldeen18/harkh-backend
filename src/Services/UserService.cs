@@ -27,31 +27,41 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public bool DeleteOne(Guid id)
+    public async Task<bool> DeleteOne(Guid id)
     {
-        User? FindUser = _userRepository.FindOne(id);
-        if (FindUser == null) return false;
-        _userRepository.DeleteOne(id);
-        _unitOfWork.Complete();
-        return true;
+        User? findUser = await _userRepository.FindOne(id);
+        if (findUser == null) return false;
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            _userRepository.DeleteOne(findUser);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return true;
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return false;
+        }
     }
 
-    public IEnumerable<UserReadDto> FindAll()
+    public async Task<IEnumerable<UserReadDto>> FindAll()
     {
-        IEnumerable<User> users = _userRepository.FindAll();
+        IEnumerable<User> users = await _userRepository.FindAll();
         return _mapper.Map<IEnumerable<UserReadDto>>(users);
     }
 
-    public UserReadDto? FindOne(Guid id)
+    public async Task<UserReadDto?> FindOne(Guid id)
     {
-        User? FindUser = _userRepository.FindOne(id);
-        if (FindUser == null) return null;
-        return _mapper.Map<UserReadDto>(FindUser);
+        User? findUser = await _userRepository.FindOne(id);
+        if (findUser == null) return null;
+        return _mapper.Map<UserReadDto>(findUser);
     }
 
-    public string? Login(UserLogInDto user)
+    public async Task<string?> Login(UserLogInDto user)
     {
-        IEnumerable<User>? users = _userRepository.FindAll();
+        IEnumerable<User>? users = await _userRepository.FindAll();
         User? isUser = users.FirstOrDefault(u => u.Email == user.Email);
         if (isUser == null) return null;
         byte[] pepper = Encoding.UTF8.GetBytes(_config["Jwt:Pepper"]!);
@@ -79,36 +89,66 @@ public class UserService : IUserService
         return tokenSettings;
     }
 
-    public UserReadDto? SignUp(UserCreateDto user)
+    public async Task<UserReadDto?> SignUp(UserCreateDto user)
     {
-        byte[] pepper = Encoding.UTF8.GetBytes(_config["Jwt:Pepper"]!);
-        PasswordUtils.HashPassword(user.Password, out string hashedPassword, pepper);
-        user.Password = hashedPassword;
-        User mappedUser = _mapper.Map<User>(user);
-        User newUser = _userRepository.CreateOne(mappedUser);
-        UserReadDto readerUser = _mapper.Map<UserReadDto>(newUser);
-        _unitOfWork.Complete();
-        return readerUser;
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            byte[] pepper = Encoding.UTF8.GetBytes(_config["Jwt:Pepper"]!);
+            PasswordUtils.HashPassword(user.Password, out string hashedPassword, pepper);
+            user.Password = hashedPassword;
+            User mappedUser = _mapper.Map<User>(user);
+            User newUser = await _userRepository.CreateOne(mappedUser);
+            UserReadDto readerUser = _mapper.Map<UserReadDto>(newUser);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return readerUser;
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 
-    public UserReadDto? UpdateOne(Guid id, UserUpdateDto updatedUser)
+    public async Task<UserReadDto?> UpdateOne(Guid id, UserUpdateDto updatedUser)
     {
-        User? user = _userRepository.FindOne(id);
+        User? user = await _userRepository.FindOne(id);
         if (user == null) return null;
-        user.Name = updatedUser.Name;
-        user.Email = updatedUser.Email;
-        user.Phone = updatedUser.Phone;
-        _userRepository.UpdateOne(user);
-        _unitOfWork.Complete();
-        return _mapper.Map<UserReadDto>(user);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            user.Name = updatedUser.Name;
+            user.Email = updatedUser.Email;
+            user.Phone = updatedUser.Phone;
+            _userRepository.UpdateOne(user);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<UserReadDto>(user);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
-    public UserReadDto? UpdateRole(Guid id, UserUpdateRoleDto updatedUser)
+    public async Task<UserReadDto?> UpdateRole(Guid id, UserUpdateRoleDto updatedUser)
     {
-        User? user = _userRepository.FindOne(id);
+        User? user = await _userRepository.FindOne(id);
         if (user == null) return null;
-        user.Role = updatedUser.Role;
-        _userRepository.UpdateOne(user);
-        _unitOfWork.Complete();
-        return _mapper.Map<UserReadDto>(user);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            user.Role = updatedUser.Role;
+            _userRepository.UpdateOne(user);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<UserReadDto>(user);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 }

@@ -13,9 +13,9 @@ public class ExperienceController : CustomController
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<ExperienceReadDto>> FindAll()
+    public async Task<ActionResult<IEnumerable<ExperienceReadDto>>> FindAll()
     {
-        var experiences = _experienceService.FindAll();
+        var experiences = await _experienceService.FindAll();
         return Ok(experiences);
     }
 }

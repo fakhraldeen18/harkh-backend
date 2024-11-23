@@ -4,7 +4,7 @@ namespace Harkh_backend.src.Abstractions;
 
 public interface ISkillService
 {
-    public IEnumerable<SkillReadDto> FindAll();
-    public SkillReadDto? CreateOne(SkillCreateDto newSkill);
-    public SkillReadDto? UpdateOne(Guid id,SkillUpdateDto updateSkill);
+    public Task<IEnumerable<SkillReadDto>> FindAll();
+    public Task<SkillReadDto?> CreateOne(SkillCreateDto newSkill);
+    public Task<SkillReadDto?> UpdateOne(Guid id, SkillUpdateDto updateSkill);
 }

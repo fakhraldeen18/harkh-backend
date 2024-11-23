@@ -14,18 +14,18 @@ public class SkillsController : CustomController
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<SkillReadDto>> FindAll()
+    public async Task<ActionResult<IEnumerable<SkillReadDto>>> FindAll()
     {
-        return Ok(_skillService.FindAll());
+        return Ok(await _skillService.FindAll());
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<SkillReadDto> CreateOne([FromBody] SkillCreateDto newSkill)
+    public async Task<ActionResult<SkillReadDto>> CreateOne([FromBody] SkillCreateDto newSkill)
     {
         if (newSkill == null) return BadRequest();
-        var createdSkill = _skillService.CreateOne(newSkill);
+        var createdSkill = await _skillService.CreateOne(newSkill);
         return CreatedAtAction(nameof(CreateOne), createdSkill);
 
     }
@@ -33,11 +33,12 @@ public class SkillsController : CustomController
     [HttpPatch("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<SkillReadDto> UpdateOne(Guid id, [FromBody] SkillUpdateDto updatedSkill)
+    public async Task<ActionResult<SkillReadDto>> UpdateOne(Guid id, [FromBody] SkillUpdateDto updatedSkill)
     {
-        SkillReadDto? findSkill = _skillService.FindAll().FirstOrDefault(s => s.Id == id);
+        var skills = await _skillService.FindAll();
+        var findSkill = skills.FirstOrDefault(s => s.Id == id);
         if (findSkill == null) return NotFound();
-        SkillReadDto? skill = _skillService.UpdateOne(id, updatedSkill);
+        SkillReadDto? skill = await _skillService.UpdateOne(id, updatedSkill);
         return Accepted(skill);
     }
 }

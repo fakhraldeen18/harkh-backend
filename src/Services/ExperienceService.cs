@@ -19,9 +19,9 @@ public class ExperienceService : IExperienceService
         _mapper = mapper;
     }
 
-    public IEnumerable<ExperienceReadDto> FindAll()
+    public async Task<IEnumerable<ExperienceReadDto>> FindAll()
     {
-        var experiences = _experienceRepository.FindAll();
+        var experiences = await _experienceRepository.FindAll();
         var readExperiences = _mapper.Map<IEnumerable<ExperienceReadDto>>(experiences);
         return readExperiences;
     }

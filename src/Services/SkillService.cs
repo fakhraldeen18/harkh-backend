@@ -19,28 +19,28 @@ public class SkillService : ISkillService
         _mapper = mapper;
     }
 
-    public SkillReadDto? CreateOne(SkillCreateDto newSkill)
+    public async Task<SkillReadDto?> CreateOne(SkillCreateDto newSkill)
     {
         if (newSkill == null) return null;
         var skill = _mapper.Map<Skill>(newSkill);
-        _skillRepository.CreateOne(skill);
-        _unitOfWork.Complete();
+        await _skillRepository.CreateOne(skill);
+        await _unitOfWork.Complete();
         return _mapper.Map<SkillReadDto>(skill);
     }
 
-    public IEnumerable<SkillReadDto> FindAll()
+    public async Task<IEnumerable<SkillReadDto>> FindAll()
     {
-        var skills = _skillRepository.FindAll();
+        var skills = await _skillRepository.FindAll();
         return _mapper.Map<IEnumerable<SkillReadDto>>(skills);
     }
 
-    public SkillReadDto? UpdateOne(Guid id, SkillUpdateDto updateSkill)
+    public async Task<SkillReadDto?> UpdateOne(Guid id, SkillUpdateDto updateSkill)
     {
-        var findSkill = _skillRepository.FindOne(id);
+        var findSkill = await _skillRepository.FindOne(id);
         if (findSkill == null) return null;
         findSkill.Name = updateSkill.Name;
         _skillRepository.UpdateOne(findSkill);
-        _unitOfWork.Complete();
+        await _unitOfWork.Complete();
         return _mapper.Map<SkillReadDto>(findSkill);
     }
 }

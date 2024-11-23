@@ -5,6 +5,6 @@ namespace Harkh_backend.src.Abstractions;
 public interface IExperienceService
 {
 
-    public IEnumerable<ExperienceReadDto> FindAll();
+    public Task<IEnumerable<ExperienceReadDto>> FindAll();
 
 }

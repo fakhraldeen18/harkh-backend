@@ -18,19 +18,19 @@ public class ProjectsController : CustomController
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<ProjectReadDto>> FindAll()
+    public async Task<ActionResult<IEnumerable<ProjectReadDto>>> FindAll()
     {
-        IEnumerable<ProjectReadDto> projects = _projectService.FindAll();
+        IEnumerable<ProjectReadDto> projects = await _projectService.FindAll();
         return Ok(projects);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<ProjectReadDto> CreateOne([FromBody] ProjectCreateDto newProject)
+    public async Task<ActionResult<ProjectReadDto>> CreateOne([FromBody] ProjectCreateDto newProject)
     {
         if (newProject == null) return BadRequest();
-        ProjectReadDto? caretProject = _projectService.CreateOne(newProject);
+        ProjectReadDto? caretProject = await _projectService.CreateOne(newProject);
         return CreatedAtAction(nameof(CreateOne), caretProject);
     }
 
@@ -38,9 +38,9 @@ public class ProjectsController : CustomController
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<ProjectReadDto> FindOne(Guid id)
+    public async Task<ActionResult<ProjectReadDto>> FindOne(Guid id)
     {
-        ProjectReadDto? project = _projectService.FindOne(id);
+        ProjectReadDto? project = await _projectService.FindOne(id);
         if (project == null) return NotFound();
         return Ok(project);
     }
@@ -49,11 +49,11 @@ public class ProjectsController : CustomController
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult DeleteOne(Guid id)
+    public async Task<ActionResult> DeleteOne(Guid id)
     {
-        ProjectReadDto? findProject = _projectService.FindOne(id);
+        ProjectReadDto? findProject = await _projectService.FindOne(id);
         if (findProject == null) return NotFound();
-        _projectService.DeleteOne(id);
+        await _projectService.DeleteOne(id);
         return NoContent();
     }
 
@@ -61,22 +61,22 @@ public class ProjectsController : CustomController
     [HttpPatch("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<ProjectReadDto> UpdateOne(Guid id, [FromBody] ProjectUpdateDto updateProject)
+    public async Task<ActionResult<ProjectReadDto>> UpdateOne(Guid id, [FromBody] ProjectUpdateDto updateProject)
     {
-        ProjectReadDto? findProject = _projectService.FindOne(id);
+        ProjectReadDto? findProject = await _projectService.FindOne(id);
         if (findProject == null) return NotFound();
-        ProjectReadDto? updatedProject = _projectService.UpdateOne(id, updateProject);
+        ProjectReadDto? updatedProject = await _projectService.UpdateOne(id, updateProject);
         return Accepted(updatedProject);
     }
 
     [HttpPatch("UpdateStatus/{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<ProjectReadDto> UpdateStatus(Guid id, [FromBody] ProjectUpdateStatusDto updateProjectStatus)
+    public async Task<ActionResult<ProjectReadDto>> UpdateStatus(Guid id, [FromBody] ProjectUpdateStatusDto updateProjectStatus)
     {
         var findProject = _projectService.FindOne(id);
         if (findProject == null) return NotFound();
-        ProjectReadDto? updatedProject = _projectService.UpdateStatus(id, updateProjectStatus);
+        ProjectReadDto? updatedProject = await _projectService.UpdateStatus(id, updateProjectStatus);
         return Accepted(updatedProject);
     }
     [HttpPost("CreteDocument")]

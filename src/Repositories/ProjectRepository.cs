@@ -17,28 +17,26 @@ public class ProjectRepository : IProjectRepository
         _milestoneRepository = milestoneRepository;
     }
 
-    public Project CreateOne(Project newProject)
+    public async Task<Project> CreateOne(Project newProject)
     {
-        _projects.Add(newProject);
+        await _projects.AddAsync(newProject);
         return newProject;
     }
 
-    public Project? DeleteOne(Guid id)
+    public Project DeleteOne(Project project)
     {
-        Project? FindProject = FindOne(id);
-        if (FindProject == null) return null;
-        _projects.Remove(FindProject);
-        return FindProject;
+        _projects.Remove(project);
+        return project;
     }
 
-    public IEnumerable<Project> FindAll()
+    public async Task<IEnumerable<Project>> FindAll()
     {
-        return _projects;
+        return await _projects.ToListAsync();
     }
 
-    public Project? FindOne(Guid id)
+    public async Task<Project?> FindOne(Guid id)
     {
-        return _projects.FirstOrDefault(p => p.Id == id);
+        return await _projects.FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public Project UpdateOne(Project updatedProject)
@@ -49,7 +47,7 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project?> UpdateProgress(Guid id)
     {
-        Project? project = await _projects.FirstOrDefaultAsync(p => p.Id == id);
+        Project? project = await FindOne(id);
         if (project == null) return null;
         var milestones = await _milestoneRepository.FindAll();
         var milestonesWithProject = milestones.Where(milestone => milestone.ProjectId == id);
@@ -65,7 +63,6 @@ public class ProjectRepository : IProjectRepository
             Console.WriteLine($"progress: {Math.Round(milestoneProgress, 2)}%");
             totalProgress += Math.Round(milestoneProgress, 2);
         }
-
         Console.WriteLine($"progressOfProject: {totalProgress}%");
         project.Progress = (int)Math.Round(totalProgress);
         project.UpdateAt = DateTime.Now;

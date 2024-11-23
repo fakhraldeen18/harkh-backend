@@ -28,11 +28,13 @@ public class TaskService : ITaskService
         Entities.Task ReadTask = _mapper.Map<Entities.Task>(newTask);
         if (ReadTask == null) return null;
         _taskRepository.CreateOne(ReadTask);
+        await _unitOfWork.Complete();
         if (ReadTask.MilestoneId == null) return _mapper.Map<TaskReadDto>(ReadTask); ;
         Milestone? milestone = await _milestoneRepository.FindOne(ReadTask.MilestoneId);
         await _milestoneRepository.UpdateProgress(milestone?.Id);
-        Project? project = _projectRepository.FindOne(milestone!.ProjectId);
-        _projectRepository.UpdateProgress(project!.Id);
+        await _unitOfWork.Complete();
+        Project? project = await _projectRepository.FindOne(milestone!.ProjectId);
+        await _projectRepository.UpdateProgress(project!.Id);
         await _unitOfWork.Complete();
         return _mapper.Map<TaskReadDto>(ReadTask);
     }
@@ -75,8 +77,8 @@ public class TaskService : ITaskService
         if (Task.MilestoneId == null) return _mapper.Map<TaskReadDto>(Task);
         Milestone? milestone = await _milestoneRepository.FindOne(Task.MilestoneId);
         await _milestoneRepository.UpdateProgress(milestone?.Id);
-        Project? project = _projectRepository.FindOne(milestone!.ProjectId);
-        _projectRepository.UpdateProgress(project!.Id);
+        Project? project = await _projectRepository.FindOne(milestone!.ProjectId);
+        await _projectRepository.UpdateProgress(project!.Id);
         await _unitOfWork.Complete();
         return _mapper.Map<TaskReadDto>(Task);
     }
@@ -99,7 +101,7 @@ public class TaskService : ITaskService
         if (Task.MilestoneId == null) return _mapper.Map<TaskReadDto>(Task);
         Milestone? milestone = await _milestoneRepository.FindOne(Task.MilestoneId);
         await _milestoneRepository.UpdateProgress(milestone?.Id);
-        Project? project = _projectRepository.FindOne(milestone!.ProjectId);
+        Project? project = await _projectRepository.FindOne(milestone!.ProjectId);
         await _projectRepository.UpdateProgress(project!.Id);
         await _unitOfWork.Complete();
         return _mapper.Map<TaskReadDto>(Task);

@@ -20,63 +20,103 @@ public class ProjectService : IProjectService
         _unitOfWork = unitOfWork;
     }
 
-    public ProjectReadDto? CreateOne(ProjectCreateDto newProject)
+    public async Task<ProjectReadDto?> CreateOne(ProjectCreateDto newProject)
     {
         Project? project = _mapper.Map<Project>(newProject);
         if (project == null) return null;
-        _projectRepository.CreateOne(project);
-        _unitOfWork.Complete();
-        return _mapper.Map<ProjectReadDto>(project);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            await _projectRepository.CreateOne(project);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<ProjectReadDto>(project);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 
-    public bool DeleteOne(Guid id)
+    public async Task<bool> DeleteOne(Guid id)
     {
-        Project? findProject = _projectRepository.FindOne(id);
+        Project? findProject = await _projectRepository.FindOne(id);
         if (findProject == null) return false;
-        _projectRepository.DeleteOne(id);
-        _unitOfWork.Complete();
-        return true;
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            _projectRepository.DeleteOne(findProject);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return true;
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return false;
+        }
     }
 
-    public IEnumerable<ProjectReadDto> FindAll()
+    public async Task<IEnumerable<ProjectReadDto>> FindAll()
     {
-        IEnumerable<Project> projects = _projectRepository.FindAll();
+        IEnumerable<Project> projects = await _projectRepository.FindAll();
         IEnumerable<ProjectReadDto> ReadProjects = _mapper.Map<IEnumerable<ProjectReadDto>>(projects);
         return ReadProjects;
     }
 
-    public ProjectReadDto? FindOne(Guid id)
+    public async Task<ProjectReadDto?> FindOne(Guid id)
     {
-        var findProject = _projectRepository.FindOne(id);
+        var findProject = await _projectRepository.FindOne(id);
         if (findProject == null) return null;
         return _mapper.Map<ProjectReadDto>(findProject);
     }
 
-    public ProjectReadDto? UpdateOne(Guid id, ProjectUpdateDto updatedProject)
+    public async Task<ProjectReadDto?> UpdateOne(Guid id, ProjectUpdateDto updatedProject)
     {
-        Project? project = _projectRepository.FindOne(id);
+        Project? project = await _projectRepository.FindOne(id);
         if (project == null) return null;
-        project.UserId = updatedProject.UserId;
-        project.Name = updatedProject.Name;
-        project.Progress = updatedProject.Progress;
-        project.Description = updatedProject.Description;
-        project.StartDate = updatedProject.StartDate;
-        project.EndDate = updatedProject.EndDate;
-        project.Status = updatedProject.Status;
-        project.UpdateAt = updatedProject.UpdateAt;
-        _projectRepository.UpdateOne(project);
-        _unitOfWork.Complete();
-        return _mapper.Map<ProjectReadDto>(project);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            project.UserId = updatedProject.UserId;
+            project.Name = updatedProject.Name;
+            project.Progress = updatedProject.Progress;
+            project.Description = updatedProject.Description;
+            project.StartDate = updatedProject.StartDate;
+            project.EndDate = updatedProject.EndDate;
+            project.Status = updatedProject.Status;
+            project.UpdateAt = updatedProject.UpdateAt;
+            _projectRepository.UpdateOne(project);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<ProjectReadDto>(project);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 
-    public ProjectReadDto? UpdateStatus(Guid id, ProjectUpdateStatusDto updatedProject)
+    public async Task<ProjectReadDto?> UpdateStatus(Guid id, ProjectUpdateStatusDto updatedProject)
     {
-        Project? project = _projectRepository.FindOne(id);
+        Project? project = await _projectRepository.FindOne(id);
         if (project == null) return null;
-        project.Status = updatedProject.Status;
-        project.UpdateAt = updatedProject.UpdateAt;
-        _projectRepository.UpdateOne(project);
-        _unitOfWork.Complete();
-        return _mapper.Map<ProjectReadDto>(project);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            project.Status = updatedProject.Status;
+            project.UpdateAt = updatedProject.UpdateAt;
+            _projectRepository.UpdateOne(project);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<ProjectReadDto>(project);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
     }
 }

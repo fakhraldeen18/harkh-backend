@@ -6,10 +6,10 @@ namespace Harkh_backend.src.Abstractions;
 public interface IProjectService
 {
 
-    public IEnumerable<ProjectReadDto> FindAll();
-    public ProjectReadDto? FindOne(Guid id);
-    public ProjectReadDto? CreateOne(ProjectCreateDto newProject);
-    public bool DeleteOne(Guid id);
-    public ProjectReadDto? UpdateOne(Guid id, ProjectUpdateDto updatedProject);
-    public ProjectReadDto? UpdateStatus(Guid id, ProjectUpdateStatusDto updatedProject);
+    public Task<IEnumerable<ProjectReadDto>> FindAll();
+    public Task<ProjectReadDto?> FindOne(Guid id);
+    public Task<ProjectReadDto?> CreateOne(ProjectCreateDto newProject);
+    public Task<bool> DeleteOne(Guid id);
+    public Task<ProjectReadDto?> UpdateOne(Guid id, ProjectUpdateDto updatedProject);
+    public Task<ProjectReadDto?> UpdateStatus(Guid id, ProjectUpdateStatusDto updatedProject);
 }

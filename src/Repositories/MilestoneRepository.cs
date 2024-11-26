@@ -12,13 +12,13 @@ public class MilestoneRepository : IMilestoneRepository
 
     private readonly DbSet<Milestone> _milestones;
     private readonly DatabaseContext _databaseContext;
-    private readonly DbSet<Entities.Task> _taskRepository;
+    private readonly DbSet<Entities.Task> _tasks;
 
-    public MilestoneRepository(DatabaseContext databaseContext, IUnitOfWork unitOfWork)
+    public MilestoneRepository(DatabaseContext databaseContext)
     {
         _databaseContext = databaseContext;
-        _milestones = databaseContext.Milestones;
-        _taskRepository = _databaseContext.Tasks;
+        _milestones = _databaseContext.Milestones;
+        _tasks = _databaseContext.Tasks;
     }
 
     public async Task<Milestone> CreateOne(Milestone newMilestone)
@@ -52,7 +52,7 @@ public class MilestoneRepository : IMilestoneRepository
     {
         Milestone? milestone = await _milestones.FirstOrDefaultAsync(m => m.Id == id);
         if (milestone == null) return null;
-        var tasks = _taskRepository;
+        var tasks = _tasks;
         var tasksWithMilestone = tasks.Where(task => task.MilestoneId == id);
         var numberOfTasks = tasks.Where(task => task.MilestoneId == id).Count();
         Console.WriteLine($"tasks {numberOfTasks}");

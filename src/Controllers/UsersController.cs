@@ -20,7 +20,7 @@ public class UsersController : CustomController
         return Ok(users);
     }
 
-    [HttpGet("{Id}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserReadDto>> FindOne(Guid id)
@@ -51,7 +51,7 @@ public class UsersController : CustomController
         return Ok(token);
     }
 
-    [HttpPatch("{Id}")]
+    [HttpPatch("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserReadDto>> UpdateOne(Guid id, [FromBody] UserUpdateDto updateUser)
@@ -61,7 +61,7 @@ public class UsersController : CustomController
         UserReadDto? updatedUser = await _userService.UpdateOne(id, updateUser);
         return Accepted(updatedUser);
     }
-    [HttpPatch("UpdateRole/{Id}")]
+    [HttpPatch("rolePromotion/{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserReadDto>> UpdateRole(Guid id, [FromBody] UserUpdateRoleDto updateUser)
@@ -72,7 +72,7 @@ public class UsersController : CustomController
         return Accepted(updatedUser);
     }
 
-    [HttpDelete("{Id}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteOne(Guid id)

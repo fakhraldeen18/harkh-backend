@@ -12,7 +12,7 @@ public class Task
     [Required]
     public string Description { get; set; }
     [Required]
-    public float Progress { get; set; }
+    public float Progress { get; set; } = 0;
     [Required]
     public Status Status { get; set; }
     [Required]

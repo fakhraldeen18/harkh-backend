@@ -61,8 +61,8 @@ public class ProjectService : IProjectService
     public async Task<IEnumerable<ProjectReadDto>> FindAll()
     {
         IEnumerable<Project> projects = await _projectRepository.FindAll();
-        IEnumerable<ProjectReadDto> ReadProjects = _mapper.Map<IEnumerable<ProjectReadDto>>(projects);
-        return ReadProjects;
+        IEnumerable<ProjectReadDto> readProjects = _mapper.Map<IEnumerable<ProjectReadDto>>(projects);
+        return readProjects;
     }
 
     public async Task<ProjectReadDto?> FindOne(Guid id)

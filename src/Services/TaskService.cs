@@ -25,22 +25,28 @@ public class TaskService : ITaskService
 
     public async Task<TaskReadDto?> CreateOne(TaskCreteDto newTask)
     {
-        Entities.Task ReadTask = _mapper.Map<Entities.Task>(newTask);
-        if (ReadTask == null) return null;
+        Entities.Task readTask = _mapper.Map<Entities.Task>(newTask);
+        if (readTask == null) return null;
+        if (readTask.Status.ToString() == "Done") readTask.Progress = 100;
         await _unitOfWork.BeginTransaction();
         try
         {
-            await _taskRepository.CreateOne(ReadTask);
+            await _taskRepository.CreateOne(readTask);
             await _unitOfWork.Complete();
-            if (ReadTask.MilestoneId == null) return _mapper.Map<TaskReadDto>(ReadTask); ;
-            Milestone? milestone = await _milestoneRepository.FindOne(ReadTask.MilestoneId);
+            if (readTask.MilestoneId == null)
+            {
+                await _unitOfWork.CommitTransaction();
+                return _mapper.Map<TaskReadDto>(readTask);
+            }
+
+            Milestone? milestone = await _milestoneRepository.FindOne(readTask.MilestoneId);
             await _milestoneRepository.UpdateProgress(milestone?.Id);
             await _unitOfWork.Complete();
             Project? project = await _projectRepository.FindOne(milestone!.ProjectId);
             await _projectRepository.UpdateProgress(project!.Id);
             await _unitOfWork.Complete();
             await _unitOfWork.CommitTransaction();
-            return _mapper.Map<TaskReadDto>(ReadTask);
+            return _mapper.Map<TaskReadDto>(readTask);
         }
         catch (Exception)
         {
@@ -70,8 +76,8 @@ public class TaskService : ITaskService
 
     public async Task<IEnumerable<TaskReadDto>> FindAll()
     {
-        IEnumerable<Entities.Task> Tasks = await _taskRepository.FindAll();
-        IEnumerable<TaskReadDto> readTasks = _mapper.Map<IEnumerable<TaskReadDto>>(Tasks);
+        IEnumerable<Entities.Task> tasks = await _taskRepository.FindAll();
+        IEnumerable<TaskReadDto> readTasks = _mapper.Map<IEnumerable<TaskReadDto>>(tasks);
         return readTasks;
     }
 
@@ -84,29 +90,35 @@ public class TaskService : ITaskService
 
     public async Task<TaskReadDto?> UpdateOne(Guid id, TaskUpdateDto updatedTask)
     {
-        Entities.Task? Task = await _taskRepository.FindOne(id);
-        if (Task == null) return null;
+        Entities.Task? task = await _taskRepository.FindOne(id);
+        if (task == null) return null;
         await _unitOfWork.BeginTransaction();
         try
         {
-            Task.Title = updatedTask.Title;
-            Task.Description = updatedTask.Description;
-            Task.Progress = updatedTask.Progress;
-            Task.Status = updatedTask.Status;
-            Task.Priority = updatedTask.Priority;
-            Task.DueDate = updatedTask.DueDate;
-            Task.UpdateAt = updatedTask.UpdateAt;
-            _taskRepository.UpdateOne(Task);
+            task.Title = updatedTask.Title;
+            task.Description = updatedTask.Description;
+            task.Status = updatedTask.Status;
+            task.Priority = updatedTask.Priority;
+            task.DueDate = updatedTask.DueDate;
+            task.UpdateAt = updatedTask.UpdateAt;
+
+            if (task.Status.ToString() == "Done") task.Progress = 100;
+
+            _taskRepository.UpdateOne(task);
             await _unitOfWork.Complete();
-            if (Task.MilestoneId == null) return _mapper.Map<TaskReadDto>(Task);
-            Milestone? milestone = await _milestoneRepository.FindOne(Task.MilestoneId);
+            if (task.MilestoneId == null)
+            {
+                await _unitOfWork.CommitTransaction();
+                return _mapper.Map<TaskReadDto>(task);
+            }
+            Milestone? milestone = await _milestoneRepository.FindOne(task.MilestoneId);
             await _milestoneRepository.UpdateProgress(milestone?.Id);
             await _unitOfWork.Complete();
             Project? project = await _projectRepository.FindOne(milestone!.ProjectId);
             await _projectRepository.UpdateProgress(project!.Id);
             await _unitOfWork.Complete();
             await _unitOfWork.CommitTransaction();
-            return _mapper.Map<TaskReadDto>(Task);
+            return _mapper.Map<TaskReadDto>(task);
         }
         catch (Exception)
         {
@@ -117,16 +129,29 @@ public class TaskService : ITaskService
 
     public async Task<TaskReadDto?> UpdateStatus(Guid id, TaskUpdateStatusDto updatedStatus)
     {
-        Entities.Task? Task = await _taskRepository.FindOne(id);
-        if (Task == null) return null;
+        Entities.Task? task = await _taskRepository.FindOne(id);
+        if (task == null) return null;
         await _unitOfWork.BeginTransaction();
         try
         {
-            Task.Status = updatedStatus.Status;
-            _taskRepository.UpdateOne(Task);
+            task.Status = updatedStatus.Status;
+            if (task.Status.ToString() == "Done") task.Progress = 100;
+            _taskRepository.UpdateOne(task);
+            await _unitOfWork.Complete();
+            if (task.MilestoneId == null)
+            {
+                await _unitOfWork.CommitTransaction();
+                return _mapper.Map<TaskReadDto>(task);
+            }
+
+            Milestone? milestone = await _milestoneRepository.FindOne(task.MilestoneId);
+            await _milestoneRepository.UpdateProgress(milestone?.Id);
+            await _unitOfWork.Complete();
+            Project? project = await _projectRepository.FindOne(milestone!.ProjectId);
+            await _projectRepository.UpdateProgress(project!.Id);
             await _unitOfWork.Complete();
             await _unitOfWork.CommitTransaction();
-            return _mapper.Map<TaskReadDto>(Task);
+            return _mapper.Map<TaskReadDto>(task);
         }
         catch (Exception)
         {
@@ -134,25 +159,18 @@ public class TaskService : ITaskService
             return null;
         }
     }
-    public async Task<TaskReadDto?> UpdateProgress(Guid id, TaskUpdateProgressDto updatedProgress)
+    public async Task<TaskReadDto?> UpdatePriority(Guid id, TaskUpdatePriorityDto updatedProgress)
     {
-        Entities.Task? Task = await _taskRepository.FindOne(id);
-        if (Task == null) return null;
+        Entities.Task? task = await _taskRepository.FindOne(id);
+        if (task == null) return null;
         await _unitOfWork.BeginTransaction();
         try
         {
-            Task.Progress = updatedProgress.Progress;
-            _taskRepository.UpdateOne(Task);
-            await _unitOfWork.Complete();
-            if (Task.MilestoneId == null) return _mapper.Map<TaskReadDto>(Task);
-            Milestone? milestone = await _milestoneRepository.FindOne(Task.MilestoneId);
-            await _milestoneRepository.UpdateProgress(milestone?.Id);
-            await _unitOfWork.Complete();
-            Project? project = await _projectRepository.FindOne(milestone!.ProjectId);
-            await _projectRepository.UpdateProgress(project!.Id);
+            task.Priority = updatedProgress.Priority;
+            _taskRepository.UpdateOne(task);
             await _unitOfWork.Complete();
             await _unitOfWork.CommitTransaction();
-            return _mapper.Map<TaskReadDto>(Task);
+            return _mapper.Map<TaskReadDto>(task);
         }
         catch (Exception)
         {

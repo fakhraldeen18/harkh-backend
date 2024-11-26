@@ -10,5 +10,5 @@ public interface ITaskService
     public Task<bool> DeleteOne(Guid id);
     public Task<TaskReadDto?> UpdateOne(Guid id, TaskUpdateDto updatedTask);
     public Task<TaskReadDto?> UpdateStatus(Guid id, TaskUpdateStatusDto updatedStatus);
-    public Task<TaskReadDto?> UpdateProgress(Guid id, TaskUpdateProgressDto updatedProgress);
+    public Task<TaskReadDto?> UpdatePriority(Guid id, TaskUpdatePriorityDto updatedProgress);
 }

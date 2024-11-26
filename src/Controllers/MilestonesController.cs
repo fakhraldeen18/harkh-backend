@@ -63,7 +63,7 @@ public class MilestonesController : CustomController
         var updatedMilestone = _milestoneService.UpdateOne(id, updateMilestone);
         return Accepted(await updatedMilestone);
     }
-    [HttpPost("CreteDocument")]
+    [HttpPost("document")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<DocumentReadDto>> CreteDocument([FromBody] DocumentCreateDto newDocument)

@@ -69,7 +69,7 @@ public class ProjectsController : CustomController
         return Accepted(updatedProject);
     }
 
-    [HttpPatch("UpdateStatus/{id}")]
+    [HttpPatch("status/{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProjectReadDto>> UpdateStatus(Guid id, [FromBody] ProjectUpdateStatusDto updateProjectStatus)
@@ -79,7 +79,7 @@ public class ProjectsController : CustomController
         ProjectReadDto? updatedProject = await _projectService.UpdateStatus(id, updateProjectStatus);
         return Accepted(updatedProject);
     }
-    [HttpPost("CreteDocument")]
+    [HttpPost("document")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<DocumentReadDto>> CreteDocument([FromBody] DocumentCreateDto newDocument)

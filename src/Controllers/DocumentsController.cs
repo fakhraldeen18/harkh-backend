@@ -3,11 +3,11 @@ using Harkh_backend.src.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Harkh_backend.src.Controllers;
-public class DocumentController : CustomController
+public class DocumentsController : CustomController
 {
     private readonly IDocumentService _documentService;
 
-    public DocumentController(IDocumentService documentService)
+    public DocumentsController(IDocumentService documentService)
     {
         _documentService = documentService;
     }

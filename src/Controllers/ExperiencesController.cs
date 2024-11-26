@@ -3,11 +3,11 @@ using Harkh_backend.src.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Harkh_backend.src.Controllers;
-public class ExperienceController : CustomController
+public class ExperiencesController : CustomController
 {
     private readonly IExperienceService _experienceService;
 
-    public ExperienceController(IExperienceService experienceService)
+    public ExperiencesController(IExperienceService experienceService)
     {
         _experienceService = experienceService;
     }

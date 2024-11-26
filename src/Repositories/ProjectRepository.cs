@@ -13,7 +13,7 @@ public class ProjectRepository : IProjectRepository
     public ProjectRepository(DatabaseContext databaseContext, IMilestoneRepository milestoneRepository)
     {
         _databaseContext = databaseContext;
-        _projects = databaseContext.Projects;
+        _projects = _databaseContext.Projects;
         _milestoneRepository = milestoneRepository;
     }
 

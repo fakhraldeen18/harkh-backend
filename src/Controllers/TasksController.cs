@@ -19,16 +19,16 @@ public class TasksController : CustomController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<TaskReadDto>>> FindAll()
     {
-        IEnumerable<TaskReadDto>? Tasks = await _TaskService.FindAll();
-        return Ok(Tasks);
+        IEnumerable<TaskReadDto>? tasks = await _TaskService.FindAll();
+        return Ok(tasks);
     }
 
-    [HttpGet("{Id}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TaskReadDto>> FindOne(Guid Id)
+    public async Task<ActionResult<TaskReadDto>> FindOne(Guid id)
     {
-        var findTask = await _TaskService.FindOne(Id);
+        var findTask = await _TaskService.FindOne(id);
         if (findTask == null) return NotFound();
         return Ok(findTask);
     }
@@ -43,47 +43,47 @@ public class TasksController : CustomController
         return CreatedAtAction(nameof(CreateOne), createdTask);
     }
 
-    [HttpDelete("{Id}")]
-    public async Task<ActionResult> DeleteOne(Guid Id)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteOne(Guid id)
     {
-        var findTask = await _TaskService.FindOne(Id);
+        var findTask = await _TaskService.FindOne(id);
         if (findTask == null) return NotFound();
-        await _TaskService.DeleteOne(Id);
+        await _TaskService.DeleteOne(id);
         return NoContent();
     }
 
-    [HttpPatch("{Id}")]
+    [HttpPatch("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TaskReadDto>> UpdateOne(Guid Id, [FromBody] TaskUpdateDto updateTask)
+    public async Task<ActionResult<TaskReadDto>> UpdateOne(Guid id, [FromBody] TaskUpdateDto updateTask)
     {
-        var findTask = _TaskService.FindOne(Id);
+        var findTask = await _TaskService.FindOne(id);
         if (findTask == null) return NotFound();
-        TaskReadDto? updatedTask = await _TaskService.UpdateOne(Id, updateTask);
+        TaskReadDto? updatedTask = await _TaskService.UpdateOne(id, updateTask);
         return Accepted(updatedTask);
     }
 
-    [HttpPatch("UpdateStatus/{Id}")]
+    [HttpPatch("status/{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TaskReadDto>> UpdateStatus(Guid Id, [FromBody] TaskUpdateStatusDto updateStatus)
+    public async Task<ActionResult<TaskReadDto>> UpdateStatus(Guid id, [FromBody] TaskUpdateStatusDto updateStatus)
     {
-        var findTask = _TaskService.FindOne(Id);
+        var findTask = await _TaskService.FindOne(id);
         if (findTask == null) return NotFound();
-        TaskReadDto? updatedTask = await _TaskService.UpdateStatus(Id, updateStatus);
+        TaskReadDto? updatedTask = await _TaskService.UpdateStatus(id, updateStatus);
         return Accepted(updatedTask);
     }
-    [HttpPatch("UpdateProgress/{Id}")]
+    [HttpPatch("priority/{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TaskReadDto>> UpdateProgress(Guid Id, [FromBody] TaskUpdateProgressDto updateProgress)
+    public async Task<ActionResult<TaskReadDto>> UpdatePriority(Guid id, [FromBody] TaskUpdatePriorityDto updateProgress)
     {
-        var findTask = _TaskService.FindOne(Id);
+        var findTask = await _TaskService.FindOne(id);
         if (findTask == null) return NotFound();
-        TaskReadDto? updatedTask = await _TaskService.UpdateProgress(Id, updateProgress);
+        TaskReadDto? updatedTask = await _TaskService.UpdatePriority(id, updateProgress);
         return Accepted(updatedTask);
     }
-    [HttpPost("CreteDocument")]
+    [HttpPost("document")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<DocumentReadDto>> CreteDocument([FromBody] DocumentCreateDto newDocument)

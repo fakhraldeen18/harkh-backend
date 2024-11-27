@@ -44,6 +44,8 @@ public class TasksController : CustomController
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteOne(Guid id)
     {
         var findTask = await _TaskService.FindOne(id);

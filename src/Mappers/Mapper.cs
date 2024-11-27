@@ -24,6 +24,7 @@ public class Mapper : Profile
         CreateMap<DocumentCreateDto, Document>();
 
         CreateMap<Experience, ExperienceReadDto>();
+        CreateMap<ExperienceCreateDto, Experience>();
 
         CreateMap<Skill, SkillReadDto>();
         CreateMap<SkillCreateDto, Skill>();

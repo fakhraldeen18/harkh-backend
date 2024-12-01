@@ -61,7 +61,7 @@ public class UsersController : CustomController
         UserReadDto? updatedUser = await _userService.UpdateOne(id, updateUser);
         return Accepted(updatedUser);
     }
-    [HttpPatch("rolePromotion/{id}")]
+    [HttpPatch("role-Promotion/{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserReadDto>> UpdateRole(Guid id, [FromBody] UserUpdateRoleDto updateUser)

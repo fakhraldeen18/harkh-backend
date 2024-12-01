@@ -1,3 +1,4 @@
+using System.Collections;
 using AutoMapper;
 using Harkh_backend.src.Abstractions;
 using Harkh_backend.src.DTOs;
@@ -9,15 +10,19 @@ namespace Harkh_backend.src.Services;
 public class ProjectService : IProjectService
 {
     private readonly IMapper _mapper;
-    private readonly IProjectRepository _projectRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IProjectRepository _projectRepository;
+    private readonly IMilestoneRepository _milestoneRepository;
+    private readonly IBaseRepository<Document> _documentRepository;
 
 
-    public ProjectService(IMapper mapper, IProjectRepository projectRepository, IUnitOfWork unitOfWork)
+    public ProjectService(IMapper mapper, IProjectRepository projectRepository, IUnitOfWork unitOfWork, IMilestoneRepository milestoneRepository)
     {
         _projectRepository = projectRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _milestoneRepository = milestoneRepository;
+        _documentRepository = _unitOfWork.Documents;
     }
 
     public async Task<ProjectReadDto?> CreateOne(ProjectCreateDto newProject)
@@ -118,5 +123,61 @@ public class ProjectService : IProjectService
             await _unitOfWork.RollbackTransaction();
             return null;
         }
+    }
+
+    public async Task<DocumentReadDto?> CreateDocument(DocumentCreateDto newDocument)
+    {
+        if (newDocument == null) return null;
+        var document = _mapper.Map<Document>(newDocument);
+        await _unitOfWork.BeginTransaction();
+        try
+        {
+            await _documentRepository.CreateOne(document);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<DocumentReadDto>(document);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
+    }
+
+
+    public async Task<IEnumerable<ProjectJoinMilestoneDto>> GetMilestones(Guid id)
+    {
+        var projects = await _projectRepository.FindAll();
+        var milestones = await _milestoneRepository.FindAll();
+        var projectMilestones = from project in projects
+                                join milestone in milestones
+                                on project.Id equals milestone.ProjectId
+                                where project.Id == id
+                                select new ProjectJoinMilestoneDto
+                                {
+                                    Name = milestone.Name,
+                                    Description = milestone.Description,
+                                    Progress = milestone.Progress,
+                                    StartDate = milestone.StartDate,
+                                    DueDate = milestone.DueDate,
+                                };
+        return projectMilestones;
+
+    }
+    public async Task<IEnumerable> GetDocuments(Guid id)
+    {
+        var projects = await _projectRepository.FindAll();
+        var documents = await _documentRepository.FindAll();
+        var projectDocuments = from project in projects
+                               join document in documents
+                               on project.Id equals document.FromId
+                               where project.Id == id
+                               select new
+                               {
+                                   document.UserId,
+                                   document.FileUrl
+                               };
+        return projectDocuments;
+
     }
 }

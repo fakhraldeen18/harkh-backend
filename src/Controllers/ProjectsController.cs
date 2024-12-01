@@ -85,7 +85,28 @@ public class ProjectsController : CustomController
     public async Task<ActionResult<DocumentReadDto>> CreteDocument([FromBody] DocumentCreateDto newDocument)
     {
         if (newDocument == null) return BadRequest();
-        DocumentReadDto? createdDocument = await _documentService.CreateOne(newDocument);
+        DocumentReadDto? createdDocument = await _projectService.CreateDocument(newDocument);
         return CreatedAtAction(nameof(CreteDocument), createdDocument);
+    }
+
+    [HttpGet("milestones/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<ProjectJoinMilestoneDto>>> GetAllMilestones(Guid id)
+    {
+        var findProject = await _projectService.FindOne(id);
+        if (findProject == null) return NotFound();
+        var milestones = await _projectService.GetMilestones(id);
+        return Ok(milestones);
+    }
+    [HttpGet("documents/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetAllDocuments(Guid id)
+    {
+        var findProject = await _projectService.FindOne(id);
+        if (findProject == null) return NotFound();
+        var documents = await _projectService.GetDocuments(id);
+        return Ok(documents);
     }
 }

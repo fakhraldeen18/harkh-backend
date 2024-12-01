@@ -1,5 +1,5 @@
+using System.Collections;
 using Harkh_backend.src.DTOs;
-using Harkh_backend.src.Entities;
 
 namespace Harkh_backend.src.Abstractions;
 
@@ -12,4 +12,7 @@ public interface IProjectService
     public Task<bool> DeleteOne(Guid id);
     public Task<ProjectReadDto?> UpdateOne(Guid id, ProjectUpdateDto updatedProject);
     public Task<ProjectReadDto?> UpdateStatus(Guid id, ProjectUpdateStatusDto updatedProject);
+    public Task<DocumentReadDto?> CreateDocument(DocumentCreateDto newDocument);
+    public Task<IEnumerable<ProjectJoinMilestoneDto>> GetMilestones(Guid id);
+    public Task<IEnumerable> GetDocuments(Guid id);
 }

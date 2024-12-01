@@ -55,3 +55,11 @@ public class ProjectUpdateProgressDto
     public DateTime UpdateAt { get; set; } = DateTime.Now;
 
 }
+public class ProjectJoinMilestoneDto
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public float Progress { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime DueDate { get; set; }
+}

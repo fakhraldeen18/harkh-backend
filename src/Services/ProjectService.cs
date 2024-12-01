@@ -145,8 +145,10 @@ public class ProjectService : IProjectService
     }
 
 
-    public async Task<IEnumerable<ProjectJoinMilestoneDto>> GetMilestones(Guid id)
+    public async Task<IEnumerable<ProjectJoinMilestoneDto>?> GetMilestones(Guid id)
     {
+        Project? findProject = await _projectRepository.FindOne(id);
+        if (findProject == null) return null;
         var projects = await _projectRepository.FindAll();
         var milestones = await _milestoneRepository.FindAll();
         var projectMilestones = from project in projects
@@ -164,8 +166,10 @@ public class ProjectService : IProjectService
         return projectMilestones;
 
     }
-    public async Task<IEnumerable> GetDocuments(Guid id)
+    public async Task<IEnumerable?> GetDocuments(Guid id)
     {
+        Project? findProject = await _projectRepository.FindOne(id);
+        if (findProject == null) return null;
         var projects = await _projectRepository.FindAll();
         var documents = await _documentRepository.FindAll();
         var projectDocuments = from project in projects

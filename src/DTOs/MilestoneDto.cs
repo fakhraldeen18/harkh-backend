@@ -1,3 +1,5 @@
+using Harkh_backend.src.Enums;
+
 namespace Harkh_backend.src.DTOs;
 
 public class MilestoneReadDto
@@ -36,6 +38,18 @@ public class MilestoneUpdateProgressDto
 {
     public float Progress { get; set; }
     public DateTime UpdateAt { get; set; } = DateTime.Now;
+}
+public class MilestoneJoinTaskDto
+{
+    public Guid UserId { get; set; } // foreign key
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public float Progress { get; set; }
+    public Status Status { get; set; }
+    public Priority Priority { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime DueDate { get; set; }
 }
 // public class MilestoneUpdateStatusDto
 // {

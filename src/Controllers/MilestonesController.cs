@@ -27,7 +27,7 @@ public class MilestonesController : CustomController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<MilestoneReadDto>> FindOne(Guid id)
     {
-        var findMilestone =  await _milestoneService.FindOne(id);
+        var findMilestone = await _milestoneService.FindOne(id);
         if (findMilestone == null) return NotFound();
         return Ok(findMilestone);
     }
@@ -71,5 +71,27 @@ public class MilestonesController : CustomController
         if (newDocument == null) return BadRequest();
         DocumentReadDto? createdDocument = await _documentService.CreateOne(newDocument);
         return CreatedAtAction(nameof(CreteDocument), createdDocument);
+    }
+
+    [HttpGet("tasks/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<MilestoneJoinTaskDto>>> GetTasks(Guid id)
+    {
+        var findMilestone = await _milestoneService.FindOne(id);
+        if (findMilestone == null) return NotFound();
+        var milestoneJoinTask = await _milestoneService.GetTasks(id);
+        return Ok(milestoneJoinTask);
+    }
+
+    [HttpGet("documents/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetAllDocuments(Guid id)
+    {
+        var findMilestone = await _milestoneService.FindOne(id);
+        if (findMilestone == null) return NotFound();
+        var documents = await _milestoneService.GetDocuments(id);
+        return Ok(documents);
     }
 }

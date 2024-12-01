@@ -1,3 +1,4 @@
+using System.Collections;
 using Harkh_backend.src.DTOs;
 
 namespace Harkh_backend.src.Abstractions;
@@ -10,5 +11,7 @@ public interface IMilestoneService
     public Task<bool> DeleteOne(Guid id);
     public Task<MilestoneReadDto?> UpdateOne(Guid id, MilestoneUpdateDto updatedMilestone);
     // public MilestoneReadDto UpdateStatus(Guid id, MilestoneUpdateStatusDto updatedStatus);
-    // public MilestoneReadDto? UpdateProgress(Guid id);
+    public Task<IEnumerable<MilestoneJoinTaskDto>?> GetTasks(Guid id);
+    public Task<IEnumerable?> GetDocuments(Guid id);
+
 }

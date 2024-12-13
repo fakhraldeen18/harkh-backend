@@ -28,5 +28,7 @@ public class Mapper : Profile
 
         CreateMap<Skill, SkillReadDto>();
         CreateMap<SkillCreateDto, Skill>();
+
+        CreateMap<UserSkillCreateDto, UserSkill>();
     }
 }

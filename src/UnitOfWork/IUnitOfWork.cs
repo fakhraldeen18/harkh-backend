@@ -11,6 +11,7 @@ public interface IUnitOfWork : IDisposable
     public IBaseRepository<Skill> Skills { get; }
     public IBaseRepository<Experience> Experiences { get; }
     public IBaseRepository<Entities.Task> Tasks { get; }
+    public IBaseRepository<UserSkill> UserSkills { get; }
 
 
     public Task<IDbContextTransaction> BeginTransaction();

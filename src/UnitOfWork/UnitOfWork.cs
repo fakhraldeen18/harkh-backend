@@ -13,8 +13,8 @@ public class UnitOfWork : IUnitOfWork
     public IBaseRepository<Entities.Task> Tasks { get; private set; }
     public IBaseRepository<Document> Documents { get; private set; }
     public IBaseRepository<Skill> Skills { get; private set; }
-
     public IBaseRepository<Experience> Experiences { get; private set; }
+    public IBaseRepository<UserSkill> UserSkills { get; private set; }
 
     public UnitOfWork(DatabaseContext databaseContext)
     {
@@ -24,6 +24,7 @@ public class UnitOfWork : IUnitOfWork
         Documents = new BaseRepository<Document>(_databaseContext);
         Experiences = new BaseRepository<Experience>(_databaseContext);
         Skills = new BaseRepository<Skill>(_databaseContext);
+        UserSkills = new BaseRepository<UserSkill>(_databaseContext);
     }
 
     public async Task<bool> Complete()

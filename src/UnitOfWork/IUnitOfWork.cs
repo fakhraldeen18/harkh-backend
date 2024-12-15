@@ -12,6 +12,7 @@ public interface IUnitOfWork : IDisposable
     public IBaseRepository<Experience> Experiences { get; }
     public IBaseRepository<Entities.Task> Tasks { get; }
     public IBaseRepository<UserSkill> UserSkills { get; }
+    public IBaseRepository<UserProject> UserProjects { get; }
 
 
     public Task<IDbContextTransaction> BeginTransaction();

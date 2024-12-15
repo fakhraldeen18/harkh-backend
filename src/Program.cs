@@ -95,6 +95,8 @@ builder.Services.AddScoped<IExperienceService, ExperienceService>();
 
 builder.Services.AddScoped<ISkillService, SkillService>();
 
+builder.Services.AddScoped<IUserProjectService, UserProjectService>();
+
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IUserSkillService, UserSkillService>();
 

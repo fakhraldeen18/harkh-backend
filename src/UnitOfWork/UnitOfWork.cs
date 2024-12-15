@@ -15,6 +15,7 @@ public class UnitOfWork : IUnitOfWork
     public IBaseRepository<Skill> Skills { get; private set; }
     public IBaseRepository<Experience> Experiences { get; private set; }
     public IBaseRepository<UserSkill> UserSkills { get; private set; }
+    public IBaseRepository<UserProject> UserProjects { get; private set; }
 
     public UnitOfWork(DatabaseContext databaseContext)
     {
@@ -25,6 +26,7 @@ public class UnitOfWork : IUnitOfWork
         Experiences = new BaseRepository<Experience>(_databaseContext);
         Skills = new BaseRepository<Skill>(_databaseContext);
         UserSkills = new BaseRepository<UserSkill>(_databaseContext);
+        UserProjects = new BaseRepository<UserProject>(_databaseContext);
     }
 
     public async Task<bool> Complete()

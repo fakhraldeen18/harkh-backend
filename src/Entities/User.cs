@@ -24,7 +24,7 @@ public class User
     public string Password { get; set; }
     [Required]
     public string Phone { get; set; }
-    public string PorfileImage { get; set; }
+    public string? ProfileImage { get; set; }
     public DateTime CreatedAt { get; set; }
     // Navigation properties
     public List<Project> Project { get; set; }

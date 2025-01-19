@@ -10,7 +10,8 @@ public class UserReadDto
     public string Email { get; set; }
     public string Phone { get; set; }
     public DateTime BirthDate { get; set; }
-    public string Position { get; set; }
+       public string? ProfileImage { get; set; }
+
     public string PorfileImage { get; set; }
     public string Role { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -25,7 +26,8 @@ public class UserCreateDto
     [Required]
     [EmailAddress]
     public string Email { get; set; }
-    public string Position { get; set; }
+       public string? ProfileImage { get; set; }
+
     public string PorfileImage { get; set; }
     public DateTime BirthDate { get; set; }
     [Required]

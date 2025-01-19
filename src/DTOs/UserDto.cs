@@ -11,6 +11,8 @@ public class UserReadDto
     public string Phone { get; set; }
     public DateTime BirthDate { get; set; }
     public string Position { get; set; }
+    public string? ProfileImage { get; set; }
+
     public string Role { get; set; }
     public DateTime CreatedAt { get; set; }
 }
@@ -25,6 +27,8 @@ public class UserCreateDto
     [EmailAddress]
     public string Email { get; set; }
     public string Position { get; set; }
+    public string? ProfileImage { get; set; }
+
     public DateTime BirthDate { get; set; }
     [Required]
     public string Phone { get; set; }
@@ -49,6 +53,8 @@ public class UserUpdateDto
     public string Email { get; set; }
     [Required]
     public string Phone { get; set; }
+    public string? ProfileImage { get; set; }
+
 }
 public class UserUpdateRoleDto
 {

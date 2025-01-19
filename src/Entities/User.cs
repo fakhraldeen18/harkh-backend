@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using Harkh_backend.src.Enums;
-using Harkh_backend.src.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Harkh_backend.src.Entities;
@@ -24,6 +23,7 @@ public class User
     public string Password { get; set; }
     [Required]
     public string Phone { get; set; }
+    public string? ProfileImage { get; set; }
     public DateTime CreatedAt { get; set; }
     // Navigation properties
     public List<Project> Project { get; set; }

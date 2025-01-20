@@ -51,14 +51,24 @@ public class UsersController : CustomController
         return Ok(token);
     }
 
-    [HttpPatch("{id}")]
+    [HttpPatch("Profile/{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserReadDto>> UpdateOne(Guid id, [FromBody] UserUpdateDto updateUser)
+    public async Task<ActionResult<UserReadDto>> UpdateProfile(Guid id, [FromBody] UserUpdateProfileDto updateUser)
     {
         UserReadDto? findUser = await _userService.FindOne(id);
         if (findUser == null) return NotFound();
-        UserReadDto? updatedUser = await _userService.UpdateOne(id, updateUser);
+        UserReadDto? updatedUser = await _userService.UpdateProfile(id, updateUser);
+        return Accepted(updatedUser);
+    }
+    [HttpPatch("Personal-Information/{id}")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UserReadDto>> UpdatePersonalInfo(Guid id, [FromBody] UserUpdatePersonalInfoDto updateUser)
+    {
+        UserReadDto? findUser = await _userService.FindOne(id);
+        if (findUser == null) return NotFound();
+        UserReadDto? updatedUser = await _userService.UpdatePersonalInfo(id, updateUser);
         return Accepted(updatedUser);
     }
     [HttpPatch("role-Promotion/{id}")]

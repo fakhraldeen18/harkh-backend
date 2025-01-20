@@ -10,21 +10,16 @@ namespace Harkh_backend.src.Entities;
 public class User
 {
     public Guid Id { get; set; }
-    [Required]
-    public string Name { get; set; }
-    [Required]
+    public string? Name { get; set; }
     public Role Role { get; set; } = Role.TeamMember;
     [Required, EmailAddress]
     public string Email { get; set; }
-    [Required]
-    public DateTime BirthDate { get; set; }
-    [Required]
-    public string Position { get; set; }
-    [Required]
+    public DateTime? BirthDate { get; set; }
+    public string? Position { get; set; }
     public string Password { get; set; }
-    [Required]
-    public string Phone { get; set; }
+    public string? Phone { get; set; }
     public string? ProfileImage { get; set; }
+    public string? Nationality { get; set; }
     public DateTime CreatedAt { get; set; }
     // Navigation properties
     public List<Project> Project { get; set; }

@@ -10,7 +10,9 @@ public class UserReadDto
     public string Email { get; set; }
     public string Phone { get; set; }
     public DateTime BirthDate { get; set; }
-    public string? ProfileImage { get; set; }
+    public string? Position { get; set; }
+    public string? Nationality { get; set; }
+    public string ProfileImage { get; set; }
     public string Role { get; set; }
     public DateTime CreatedAt { get; set; }
 }
@@ -18,19 +20,14 @@ public class UserReadDto
 public class UserCreateDto
 {
     [Required]
-    public string Name { get; set; }
-    [Required]
-    public string Password { get; set; }
-    [Required]
     [EmailAddress]
     public string Email { get; set; }
-    public string? ProfileImage { get; set; }
-
-    public DateTime BirthDate { get; set; }
     [Required]
-    public string Phone { get; set; }
+    public string Password { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 }
+
+
 
 public class UserLogInDto
 {
@@ -41,17 +38,30 @@ public class UserLogInDto
     public string Password { get; set; }
 }
 
-public class UserUpdateDto
+public class UserUpdateProfileDto
 {
     [Required]
     public string Name { get; set; }
     [Required]
+    public string Position { get; set; }
+    [Required]
+    public string ProfileImage { get; set; }
+}
+
+
+public class UserUpdatePersonalInfoDto
+{
+    [Required]
     [EmailAddress]
     public string Email { get; set; }
     [Required]
+    public string Nationality { get; set; }
+    [Required]
+    public DateTime BirthDate { get; set; }
+    [Required]
     public string Phone { get; set; }
-    public string? ProfileImage { get; set; }
 }
+
 public class UserUpdateRoleDto
 {
     [Required]

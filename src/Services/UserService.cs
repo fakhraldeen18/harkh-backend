@@ -71,7 +71,8 @@ public class UserService : IUserService
         //Create Token 
         var claims = new[]
         {
-                new Claim(ClaimTypes.Name, isUser.Name),
+                // new Claim(ClaimTypes.Name, isUser.Name),
+                new Claim(ClaimTypes.Role, isUser.Role.ToString()),
                 new Claim(ClaimTypes.Email, isUser.Email),
                 new Claim(ClaimTypes.NameIdentifier, isUser.Id.ToString()),
             };
@@ -111,7 +112,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<UserReadDto?> UpdateOne(Guid id, UserUpdateDto updatedUser)
+    public async Task<UserReadDto?> UpdateProfile(Guid id, UserUpdateProfileDto updatedUser)
     {
         User? user = await _userRepository.FindOne(id);
         if (user == null) return null;
@@ -119,8 +120,30 @@ public class UserService : IUserService
         try
         {
             user.Name = updatedUser.Name;
+            user.Position = updatedUser.Position;
+            user.ProfileImage = updatedUser.ProfileImage;
+            _userRepository.UpdateOne(user);
+            await _unitOfWork.Complete();
+            await _unitOfWork.CommitTransaction();
+            return _mapper.Map<UserReadDto>(user);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransaction();
+            return null;
+        }
+    }
+    public async Task<UserReadDto?> UpdatePersonalInfo(Guid id, UserUpdatePersonalInfoDto updatedUser)
+    {
+        User? user = await _userRepository.FindOne(id);
+        if (user == null) return null;
+        await _unitOfWork.BeginTransaction();
+        try
+        {
             user.Email = updatedUser.Email;
             user.Phone = updatedUser.Phone;
+            user.Nationality = updatedUser.Nationality;
+            user.BirthDate = updatedUser.BirthDate;
             _userRepository.UpdateOne(user);
             await _unitOfWork.Complete();
             await _unitOfWork.CommitTransaction();

@@ -2,16 +2,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Harkh_backend.src.Entities;
 
-public class Experience
+public class Education
 {
+
+
     public Guid Id { get; set; }
     public Guid UserId { get; set; } // foreign key
     [Required]
-    public string Title { get; set; }
-    public string? Description { get; set; }
-    public string? EmploymentType { get; set; }
+    public string School { get; set; }
     [Required]
-    public string CompanyName { get; set; }
+    public string Degree { get; set; }
+    [Required]
+    public string FieldStudy { get; set; }
+    public float? Grade { get; set; }
     [Required]
     public DateTime StartDate { get; set; }
     [Required]

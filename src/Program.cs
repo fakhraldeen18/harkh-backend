@@ -93,6 +93,8 @@ builder.Services.AddScoped<IDocumentService, DocumentService>();
 
 builder.Services.AddScoped<IExperienceService, ExperienceService>();
 
+builder.Services.AddScoped<IEducationService, EducationService>();
+
 builder.Services.AddScoped<ISkillService, SkillService>();
 
 builder.Services.AddScoped<IUserProjectService, UserProjectService>();

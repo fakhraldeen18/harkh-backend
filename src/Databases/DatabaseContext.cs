@@ -11,6 +11,7 @@ public class DatabaseContext : DbContext // DbContext is built in class to give 
     public DbSet<Document> Documents { get; set; }
     public DbSet<Skill> Skills { get; set; }
     public DbSet<Experience> Experiences { get; set; }
+    public DbSet<Education> Educations { get; set; }
     public DbSet<UserSkill> UserSkills { get; set; }
     public DbSet<UserProject> UserProjects { get; set; }
 

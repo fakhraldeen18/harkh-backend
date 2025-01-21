@@ -10,6 +10,7 @@ public interface IUnitOfWork : IDisposable
     public IBaseRepository<Document> Documents { get; }
     public IBaseRepository<Skill> Skills { get; }
     public IBaseRepository<Experience> Experiences { get; }
+    public IBaseRepository<Education> Educations { get; }
     public IBaseRepository<Entities.Task> Tasks { get; }
     public IBaseRepository<UserSkill> UserSkills { get; }
     public IBaseRepository<UserProject> UserProjects { get; }

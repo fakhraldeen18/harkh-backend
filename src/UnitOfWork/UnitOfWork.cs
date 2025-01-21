@@ -14,6 +14,7 @@ public class UnitOfWork : IUnitOfWork
     public IBaseRepository<Document> Documents { get; private set; }
     public IBaseRepository<Skill> Skills { get; private set; }
     public IBaseRepository<Experience> Experiences { get; private set; }
+    public IBaseRepository<Education> Educations { get; private set; }
     public IBaseRepository<UserSkill> UserSkills { get; private set; }
     public IBaseRepository<UserProject> UserProjects { get; private set; }
 
@@ -24,6 +25,7 @@ public class UnitOfWork : IUnitOfWork
         Tasks = new BaseRepository<Entities.Task>(_databaseContext);
         Documents = new BaseRepository<Document>(_databaseContext);
         Experiences = new BaseRepository<Experience>(_databaseContext);
+        Educations = new BaseRepository<Education>(_databaseContext);
         Skills = new BaseRepository<Skill>(_databaseContext);
         UserSkills = new BaseRepository<UserSkill>(_databaseContext);
         UserProjects = new BaseRepository<UserProject>(_databaseContext);
